@@ -1,8 +1,10 @@
 import React, { createContext, useReducer, useContext } from 'react'
 
+import { TriggerElement } from '../Trigger'
+
 interface State {
   open: boolean
-  containerRef?: React.RefObject<HTMLDivElement> | null
+  containerRef?: React.RefObject<TriggerElement> | null
 }
 
 const DEFAULT_STATE = {
@@ -20,7 +22,7 @@ interface CloseAction {
 
 interface SetContainerRefAction {
   type: 'SET_CONTAINER_REF'
-  payload: { containerRef: React.RefObject<HTMLDivElement> }
+  payload: { containerRef: React.RefObject<TriggerElement> }
 }
 
 type Action = OpenAction | CloseAction | SetContainerRefAction

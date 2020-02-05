@@ -1,25 +1,30 @@
 import classnames from 'classnames'
 import { useCssHandles } from 'vtex.css-handles'
-import React, { useEffect, useRef, useCallback } from 'react'
+import React, { useEffect, useRef } from 'react'
 
 import {
-  PopoverContextProvider,
   usePopoverDispatch,
-  usePopoverState,
+  PopoverContextProvider,
 } from './components/PopoverContext'
 
 const CSS_HANDLES = ['triggerContainer']
 
+// TODO hover trigger
+type TriggerMode = 'click' | 'hover'
+
 interface Props {
   children: React.ReactNode
+  trigger?: TriggerMode
 }
 
+export type TriggerElement = HTMLDivElement & HTMLButtonElement
+
 function Trigger(props: Props) {
-  const { children } = props
+  const { children, trigger = 'click' } = props
   const dispatch = usePopoverDispatch()
-  const { open } = usePopoverState()
-  const containerRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<TriggerElement>(null)
   const handles = useCssHandles(CSS_HANDLES)
+  const ContainerTag = trigger === 'click' ? 'button' : 'div'
 
   useEffect(() => {
     if (dispatch) {
@@ -30,29 +35,18 @@ function Trigger(props: Props) {
     }
   }, [dispatch, containerRef])
 
-  useEffect(() => {
-    if (open && containerRef.current) {
-      containerRef.current.focus()
-    }
-  }, [open])
-
-  const handleKeydown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (e.key !== 'Enter' && e.key !== 'Escape') {
+  const handleKeydown = (e: React.KeyboardEvent<TriggerElement>) => {
+    if (e.key !== 'Enter') {
       return
     }
 
     if (dispatch) {
-      if (e.key === 'Enter' && !open) {
-        e.stopPropagation()
-        dispatch({ type: 'OPEN_POPOVER' })
-      } else if (e.key === 'Escape' && open) {
-        e.stopPropagation()
-        dispatch({ type: 'CLOSE_POPOVER' })
-      }
+      e.stopPropagation()
+      dispatch({ type: 'OPEN_POPOVER' })
     }
   }
 
-  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleClick = (e: React.MouseEvent<TriggerElement>) => {
     e.stopPropagation()
     e.preventDefault()
 
@@ -61,26 +55,21 @@ function Trigger(props: Props) {
     }
   }
 
-  const handleBlur = useCallback(() => {
-    if (dispatch) {
-      dispatch({ type: 'CLOSE_POPOVER' })
-    }
-  }, [dispatch])
-
-  const classes = classnames(handles.triggerContainer, 'relative outline-0 dib')
+  const classes = classnames(
+    handles.triggerContainer,
+    'outline-0 bg-transparent bn pa0'
+  )
 
   return (
-    <div
+    <ContainerTag
       tabIndex={0}
-      role="button"
       ref={containerRef}
-      onBlur={handleBlur}
       className={classes}
       onClick={handleClick}
       onKeyDown={handleKeydown}
     >
       {children}
-    </div>
+    </ContainerTag>
   )
 }
 
