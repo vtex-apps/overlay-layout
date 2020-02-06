@@ -2,15 +2,16 @@ import React, {
   useRef,
   useState,
   useEffect,
+  forwardRef,
   useCallback,
   MutableRefObject,
 } from 'react'
 import {
-  State,
-  Instance,
   createPopper,
   VirtualElement,
   ModifierArguments,
+  State as PopperState,
+  Instance as PopperInstance,
   Placement as PopperPlacementType,
 } from '@popperjs/core'
 import { useCssHandles } from 'vtex.css-handles'
@@ -43,7 +44,7 @@ function getAnchorEl(anchorEl: React.ReactNode) {
 
 const CSS_HANDLES = ['popper']
 
-const Popper = React.forwardRef(function Popper(props: Props, ref) {
+const Popper = forwardRef(function Popper(props: Props, ref) {
   const {
     role,
     anchorEl,
@@ -56,7 +57,9 @@ const Popper = React.forwardRef(function Popper(props: Props, ref) {
 
   const tooltipRef = useRef<HTMLElement>(null)
   const ownRef = useForkRef(tooltipRef, ref)
-  const popperRef: MutableRefObject<Instance | null> = useRef<Instance>(null)
+  const popperRef: MutableRefObject<PopperInstance | null> = useRef<
+    PopperInstance
+  >(null)
   const [placement, setPlacement] = useState(initialPlacement)
   const [exited, setExited] = useState(true)
   const handles = useCssHandles(CSS_HANDLES)
@@ -78,7 +81,7 @@ const Popper = React.forwardRef(function Popper(props: Props, ref) {
       popperRef.current.destroy()
     }
 
-    const handlePopperFirstUpdate = (data: Partial<State>) => {
+    const handlePopperFirstUpdate = (data: Partial<PopperState>) => {
       if (data.placement) {
         setPlacement(data.placement)
       }
