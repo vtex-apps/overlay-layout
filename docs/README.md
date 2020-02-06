@@ -1,6 +1,6 @@
-📢 Don't fork this project. Use, [contribute](https://github.com/vtex-apps/awesome-io#contributing), or open issues through [Store Discussion](https://github.com/vtex-apps/store-discussion).
+📢 Don't fork this project. Use, [contribute](https://github.com/vtex-apps/popover-layout), or open issues through [Store Discussion](https://github.com/vtex-apps/store-discussion).
 
-# DO NOT USE THIS Popover Layout
+# [DO NOT USE THIS] Popover Layout
 
 This repository provides blocks that can help you create a Dropdown, Select or a Tooltip component.
 

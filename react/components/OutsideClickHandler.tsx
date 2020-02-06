@@ -1,5 +1,4 @@
 import React, { useCallback, useRef, forwardRef, useEffect } from 'react'
-// Only 764B minified + Gzipped https://bundlephobia.com/result?p=consolidated-events@2.0.2
 import { addEventListener } from 'consolidated-events'
 import { useCssHandles } from 'vtex.css-handles'
 
@@ -108,11 +107,9 @@ const OutsideClickHandler = forwardRef(function OutsideClickHandler(
       }
       addMouseDownEventListener(useCapture)
     }
-  }, [addMouseDownEventListener, disabled, useCapture])
 
-  useEffect(() => {
     return () => removeEventListeners()
-  }, [])
+  }, [addMouseDownEventListener, disabled, useCapture])
 
   return (
     <div className={handles.outsideClickHandler} ref={handleRef}>
