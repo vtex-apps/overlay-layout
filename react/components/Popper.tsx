@@ -13,8 +13,10 @@ import {
   ModifierArguments,
   Placement as PopperPlacementType,
 } from '@popperjs/core'
+import { useCssHandles } from 'vtex.css-handles'
 
 import Portal from './Portal'
+import styles from '../styles.css'
 import setRef from '../modules/setRef'
 import useForkRef from '../modules/useForkRef'
 
@@ -39,6 +41,8 @@ function getAnchorEl(anchorEl: React.ReactNode) {
   return typeof anchorEl === 'function' ? anchorEl() : anchorEl
 }
 
+const CSS_HANDLES = ['popper']
+
 const Popper = React.forwardRef(function Popper(props: Props, ref) {
   const {
     role,
@@ -55,6 +59,7 @@ const Popper = React.forwardRef(function Popper(props: Props, ref) {
   const popperRef: MutableRefObject<Instance | null> = useRef<Instance>(null)
   const [placement, setPlacement] = useState(initialPlacement)
   const [exited, setExited] = useState(true)
+  const handles = useCssHandles(CSS_HANDLES)
 
   // It doesn't have a dependency array because it should update
   // after every render of react
@@ -167,6 +172,7 @@ const Popper = React.forwardRef(function Popper(props: Props, ref) {
         role={role}
         ref={handleRef}
         style={{ position: 'fixed', left: 0, top: 0 }}
+        className={`${styles.popper} ${handles.popper}`}
         {...rest}
       >
         {typeof children === 'function' ? children(childProps) : children}

@@ -7,7 +7,7 @@ import {
   PopoverContextProvider,
 } from './components/PopoverContext'
 
-const CSS_HANDLES = ['triggerContainer']
+const CSS_HANDLES = ['trigger']
 
 // TODO hover trigger
 type TriggerMode = 'click' | 'hover'
@@ -56,8 +56,8 @@ function Trigger(props: Props) {
   }
 
   const classes = classnames(
-    handles.triggerContainer,
-    'outline-0 bg-transparent bn pa0'
+    handles.trigger,
+    'outline-0 bg-transparent bn pa0 dib'
   )
 
   return (
