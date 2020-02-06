@@ -1,58 +1,81 @@
-# VTEX React App Template
+📢 Don't fork this project. Use, [contribute](https://github.com/vtex-apps/awesome-io#contributing), or open issues through [Store Discussion](https://github.com/vtex-apps/store-discussion).
 
-Our guide repository to structure for react apps, that should be used as a template.
+# DO NOT USE THIS Popover Layout
 
-We use `yarn` as our default package manager, before coding make sure to run yarn on: `root` and `react` folders.
+This repository provides blocks that can help you create a Dropdown, Select or a Tooltip component.
 
-## Some features:
+## Configuration
 
-### Tests
+1. Import the popover layout app to your theme's dependencies in the `manifest.json`, for example:
 
-For testing we use `@vtex/test-tools`, our own testing framework based on `react-testing-library`, the tests should be located on the `react/__tests__` folder. For references, visit our [repository](https://github.com/vtex/test-tools).
-
-### Hooks
-
-Husky hooks tha runs on every `pre-commit` and `pre-push`.
-
-### Intl Equalizer
-
-Tool for equalizing the messages located on the `messages` folder/builder. It's configured to use the **en.json** as the default file for comparison. For references, visit our [repository](https://github.com/vtex/intl-equalizer).
-
-### Lint + Formatting
-
-TS lint configured with Prettier and .Config.
-
-### Available Scripts
-
-```json
+```jsonc
 {
-  "lint": "cd ./react && yarn lint",
-  "test": "cd ./react && yarn test",
-  "lint:locales": "intl-equalizer",
-  "locales:fix": "intl-equalizer --fix",
-  "verify": "yarn lint && yarn lint:locales && yarn test"
+  "dependencies": {
+    "vtex.popover-layout": "0.x"
+  }
 }
 ```
 
-### Ci
+2. Now you can use the two blocks exported by `vtex.popover-layout`. Notice that you need to configure your own popover-layout and pass it as a child of popover-trigger.
 
-#### Install:
-
-```yml
-install:
-  commands:
-    - echo Installing Packages...
-    - cd react
-    - npm install
-    - echo Packages installed!
+```jsonc
+{
+  "rich-text#link": {
+    "props": {
+      "text": "\n**Reach us at**\nwww.vtex.com.br",
+      "blockClass": "link"
+    }
+  },
+  "popover-layout": {
+    "props": {
+      "placement": "left"
+    },
+    "children": [
+      "rich-text#link"
+    ]
+  },
+  "rich-text#question": {
+    "props": {
+      "text": "**Click to open the popoer layout**",
+      "blockClass": "question"
+    }
+  },
+  "popover-trigger": {
+    "children": [
+      "rich-text#question",
+      "popover-layout"    
+    ]
+  }
+}
 ```
 
-#### Pre-build:
+### Popover
 
-```yml
-pre_build:
-  commands:
-    - echo Running tests...
-    - npm run verify
-    - echo Lint and tests finished!
-```
+| Prop name | Type | Description | Default value |
+| --- | --- | --- | --- |
+| placement | `Placement` | Describes the preferred placement of the popover. If there is no space to put the popover in the placement that you choose it will fit in a fallback position | `'bottom`' |
+
+### PopoverTrigger
+
+| Prop name | Type | Description | Default value |
+| --- | --- | --- | --- |
+| trigger | `TriggerMode` | What kind of user action must happen to open the popover | `'click'` |
+
+### Placement
+
+| Value | Description |
+| `'bottom'` | Render the Popover at the bottom of the `PopoverTrigger` |
+| `'left'` | Render the Popover at the left of the `PopoverTrigger` |
+| `'right'` | Render the Popover at the right of the `PopoverTrigger` |
+| `'top'` | Render the Popover at the top of the `PopoverTrigger` |
+
+## Customization
+
+In order to apply CSS customizations in this and other blocks, follow the instructions given in the recipe on [Using CSS Handles for store customization](https://vtex.io/docs/recipes/style/using-css-handles-for-store-customization).
+
+| CSS Handles |
+| --- |
+| `outsideClickHandler` |
+| `paper` |
+| `popper` |
+| `trigger` |
