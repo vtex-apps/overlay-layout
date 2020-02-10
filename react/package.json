@@ -4,17 +4,20 @@
     "test": "vtex-test-tools test"
   },
   "dependencies": {
+    "@popperjs/core": "^2.0.5",
+    "classnames": "^2.2.6",
+    "consolidated-events": "^2.0.2",
     "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "react-dom": "^16.8.6",
+    "react-transition-group": "^4.3.0"
   },
   "devDependencies": {
+    "@types/classnames": "^2.2.9",
     "@types/jest": "^24.9.0",
     "@types/react": "^16.8.22",
+    "@types/react-transition-group": "^4.2.3",
     "@vtex/test-tools": "^3.0.0",
     "@vtex/tsconfig": "^0.3.0",
-    "eslint": "5.x",
-    "eslint-config-vtex-react": "^5.1.0",
-    "prettier": "^1.18.2",
-    "typescript": "3.5.2"
+    "typescript": "3.7.3"
   }
 }

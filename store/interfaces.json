@@ -1,0 +1,10 @@
+{
+  "popover-trigger": {
+    "component": "Trigger",
+    "composition": "children"
+  },
+  "popover-layout": {
+    "component": "Popover",
+    "composition": "children"
+  }
+}
