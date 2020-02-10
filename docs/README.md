@@ -20,10 +20,16 @@ This repository provides blocks that can help you create a Dropdown, Select or a
 
 ```jsonc
 {
-  "rich-text#link": {
+  "popover-trigger": {
+    "children": [
+      "rich-text#question",
+      "popover-layout"    
+    ]
+  },
+  "rich-text#question": {
     "props": {
-      "text": "\n**Reach us at**\nwww.vtex.com.br",
-      "blockClass": "link"
+      "text": "**Click to open the popoer layout**",
+      "blockClass": "question"
     }
   },
   "popover-layout": {
@@ -34,17 +40,11 @@ This repository provides blocks that can help you create a Dropdown, Select or a
       "rich-text#link"
     ]
   },
-  "rich-text#question": {
+  "rich-text#link": {
     "props": {
-      "text": "**Click to open the popoer layout**",
-      "blockClass": "question"
+      "text": "\n**Reach us at**\nwww.vtex.com.br",
+      "blockClass": "link"
     }
-  },
-  "popover-trigger": {
-    "children": [
-      "rich-text#question",
-      "popover-layout"    
-    ]
   }
 }
 ```
@@ -60,6 +60,11 @@ This repository provides blocks that can help you create a Dropdown, Select or a
 | Prop name | Type | Description | Default value |
 | --- | --- | --- | --- |
 | trigger | `TriggerMode` | What kind of user action must happen to open the popover | `'click'` |
+
+### TriggerMode
+| --- | --- |
+| `'click'` | Open when you click the trigger |
+| `'hover'` | Open when you hover the trigger | 
 
 ### Placement
 
