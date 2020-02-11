@@ -30,17 +30,31 @@ export default function Popover(props: Props) {
     'outline-0 ma2 pa3 bg-base br bl bb b--muted-4 br2 br--bottom w-100'
   )
 
-  const handleClose = useCallback(() => {
-    if (dispatch) {
-      dispatch({ type: 'CLOSE_POPOVER' })
-    }
-  }, [dispatch])
+  const handleClose = useCallback(
+    (e: Event) => {
+      const triggerClicked = containerRef?.current?.contains(
+        e.target as Node | null
+      )
+      if (dispatch && !triggerClicked) {
+        dispatch({ type: 'CLOSE_POPOVER' })
+      }
+    },
+    [containerRef, dispatch]
+  )
 
   const handleKeydown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key !== 'Escape') {
       return
     }
-    handleClose()
+
+    if (dispatch) {
+      dispatch({ type: 'CLOSE_POPOVER' })
+    }
+  }
+
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    e.preventDefault()
   }
 
   return (
@@ -51,6 +65,7 @@ export default function Popover(props: Props) {
             role={role}
             tabIndex={-1}
             className={classes}
+            onClick={handleClick}
             onKeyDown={handleKeydown}
           >
             {children}

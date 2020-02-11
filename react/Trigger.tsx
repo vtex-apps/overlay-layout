@@ -5,6 +5,7 @@ import React, { useEffect, useRef } from 'react'
 import {
   usePopoverDispatch,
   PopoverContextProvider,
+  usePopoverState,
 } from './components/PopoverContext'
 
 const CSS_HANDLES = ['trigger']
@@ -22,6 +23,7 @@ export type TriggerElement = HTMLDivElement & HTMLButtonElement
 function Trigger(props: Props) {
   const { children, trigger = 'click' } = props
   const dispatch = usePopoverDispatch()
+  const { open } = usePopoverState()
   const containerRef = useRef<TriggerElement>(null)
   const handles = useCssHandles(CSS_HANDLES)
   const ContainerTag = trigger === 'click' ? 'button' : 'div'
@@ -51,7 +53,11 @@ function Trigger(props: Props) {
     e.preventDefault()
 
     if (dispatch) {
-      dispatch({ type: 'OPEN_POPOVER' })
+      if (open) {
+        dispatch({ type: 'CLOSE_POPOVER' })
+      } else {
+        dispatch({ type: 'OPEN_POPOVER' })
+      }
     }
   }
 
