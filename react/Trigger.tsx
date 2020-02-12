@@ -10,8 +10,7 @@ import {
 
 const CSS_HANDLES = ['trigger']
 
-// TODO hover trigger
-type TriggerMode = 'click' | 'hover'
+export type TriggerMode = 'click' | 'hover'
 
 interface Props {
   children: React.ReactNode
@@ -37,8 +36,17 @@ function Trigger(props: Props) {
     }
   }, [dispatch, containerRef])
 
+  useEffect(() => {
+    if (dispatch) {
+      dispatch({
+        type: 'SET_TRIGGER_MODE',
+        payload: { triggerMode: trigger },
+      })
+    }
+  }, [dispatch, trigger])
+
   const handleKeydown = (e: React.KeyboardEvent<TriggerElement>) => {
-    if (e.key !== 'Enter') {
+    if (e.key !== 'Enter' || trigger !== 'click') {
       return
     }
 
@@ -49,6 +57,10 @@ function Trigger(props: Props) {
   }
 
   const handleClick = (e: React.MouseEvent<TriggerElement>) => {
+    if (trigger !== 'click') {
+      return
+    }
+
     e.stopPropagation()
     e.preventDefault()
 
@@ -57,6 +69,22 @@ function Trigger(props: Props) {
         dispatch({ type: 'CLOSE_POPOVER' })
       } else {
         dispatch({ type: 'OPEN_POPOVER' })
+      }
+    }
+  }
+
+  const handleMouseEnter = () => {
+    if (trigger === 'hover') {
+      if (dispatch) {
+        dispatch({ type: 'OPEN_POPOVER' })
+      }
+    }
+  }
+
+  const handleMouseLeave = () => {
+    if (trigger === 'hover') {
+      if (dispatch) {
+        dispatch({ type: 'CLOSE_POPOVER' })
       }
     }
   }
@@ -73,6 +101,8 @@ function Trigger(props: Props) {
       className={classes}
       onClick={handleClick}
       onKeyDown={handleKeydown}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       {children}
     </ContainerTag>

@@ -1,15 +1,17 @@
 import React, { createContext, useReducer, useContext } from 'react'
 
-import { TriggerElement } from '../Trigger'
+import { TriggerElement, TriggerMode } from '../Trigger'
 
 interface State {
   open: boolean
   containerRef?: React.RefObject<TriggerElement> | null
+  triggerMode: TriggerMode
 }
 
-const DEFAULT_STATE = {
+const DEFAULT_STATE: State = {
   open: false,
   containerRef: null,
+  triggerMode: 'click',
 }
 
 interface OpenAction {
@@ -25,7 +27,16 @@ interface SetContainerRefAction {
   payload: { containerRef: React.RefObject<TriggerElement> }
 }
 
-type Action = OpenAction | CloseAction | SetContainerRefAction
+interface SetTriggerModeAction {
+  type: 'SET_TRIGGER_MODE'
+  payload: { triggerMode: TriggerMode }
+}
+
+type Action =
+  | OpenAction
+  | CloseAction
+  | SetContainerRefAction
+  | SetTriggerModeAction
 type Dispatch = (action: Action) => void
 
 const PopoverStateContext = createContext<State>(DEFAULT_STATE)
@@ -47,6 +58,11 @@ function popoverContextReducer(state: State = DEFAULT_STATE, action: Action) {
       return {
         ...state,
         containerRef: action.payload?.containerRef,
+      }
+    case 'SET_TRIGGER_MODE':
+      return {
+        ...state,
+        triggerMode: action.payload?.triggerMode,
       }
     default:
       return state

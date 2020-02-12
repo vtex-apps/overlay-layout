@@ -21,13 +21,13 @@ const CSS_HANDLES = ['paper']
 
 export default function Popover(props: Props) {
   const { children, placement, role } = props
-  const { open, containerRef } = usePopoverState()
+  const { open, containerRef, triggerMode } = usePopoverState()
   const dispatch = usePopoverDispatch()
   const handles = useCssHandles(CSS_HANDLES)
 
   const classes = classnames(
     handles.paper,
-    'outline-0 ma2 pa3 bg-base br bl bb b--muted-4 br2 br--bottom w-100'
+    'outline-0 ma2 pa3 bg-base br bl bb bt b--muted-4 br2 w-100'
   )
 
   const handleClose = useCallback(
@@ -42,20 +42,28 @@ export default function Popover(props: Props) {
     [containerRef, dispatch]
   )
 
-  const handleKeydown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (e.key !== 'Escape') {
-      return
-    }
+  const handleKeydown = useCallback(
+    (e: React.KeyboardEvent<HTMLDivElement>) => {
+      if (e.key !== 'Escape' || triggerMode !== 'click') {
+        return
+      }
 
-    if (dispatch) {
-      dispatch({ type: 'CLOSE_POPOVER' })
-    }
-  }
+      if (dispatch) {
+        dispatch({ type: 'CLOSE_POPOVER' })
+      }
+    },
+    [dispatch, triggerMode]
+  )
 
-  const handleClick = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    e.preventDefault()
-  }
+  const handleClick = useCallback(
+    (e: React.MouseEvent) => {
+      if (triggerMode === 'click') {
+        e.stopPropagation()
+        e.preventDefault()
+      }
+    },
+    [triggerMode]
+  )
 
   return (
     <Popper open={open} placement={placement} anchorEl={containerRef?.current}>
