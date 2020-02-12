@@ -44,7 +44,7 @@ export default function Popover(props: Props) {
   const handles = useCssHandles(CSS_HANDLES)
   const TransitionComponent = useTransition(transitionComponent)
 
-  const classes = classnames(
+  const paperClasses = classnames(
     handles.paper,
     'outline-0 ma2 pa3 bg-base br bl bb bt b--muted-4 br2 w-100'
   )
@@ -98,8 +98,8 @@ export default function Popover(props: Props) {
               <div
                 role={role}
                 tabIndex={-1}
-                className={classes}
                 onClick={handleClick}
+                className={paperClasses}
                 onKeyDown={handleKeydown}
               >
                 {children}
