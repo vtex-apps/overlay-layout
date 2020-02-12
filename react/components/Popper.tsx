@@ -174,7 +174,7 @@ const Popper = forwardRef(function Popper(props: Props, ref) {
       <div
         role={role}
         ref={handleRef}
-        style={{ position: 'fixed', left: 0, top: 0 }}
+        style={{ position: 'fixed', left: 0, top: 0, ...rest.style }}
         className={`${styles.popper} ${handles.popper}`}
         {...rest}
       >

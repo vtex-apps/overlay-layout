@@ -1,29 +1,48 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import classnames from 'classnames'
 import { Placement } from '@popperjs/core'
 import { useCssHandles } from 'vtex.css-handles'
 
 import Popper from './components/Popper'
 import TrapFocus from './components/TrapFocus'
+import Fade from './components/Animations/Fade'
+import OutsideClickHandler from './components/OutsideClickHandler'
 import {
   usePopoverState,
   usePopoverDispatch,
 } from './components/PopoverContext'
-import OutsideClickHandler from './components/OutsideClickHandler'
+
+type TransitionComponentType = 'fade'
 
 interface Props {
   children: React.ReactNode
   placement: Placement
   role?: string
+  transitionComponent: TransitionComponentType
+}
+
+function getTransitionComponent(option: TransitionComponentType) {
+  option = option.toLowerCase() as TransitionComponentType
+  switch (option) {
+    case 'fade':
+      return Fade
+    default:
+      return Fade
+  }
+}
+
+function useTransition(option: TransitionComponentType) {
+  return useMemo(() => getTransitionComponent(option), [option])
 }
 
 const CSS_HANDLES = ['paper']
 
 export default function Popover(props: Props) {
-  const { children, placement, role } = props
+  const { children, placement, role, transitionComponent = 'fade' } = props
   const { open, containerRef, triggerMode } = usePopoverState()
   const dispatch = usePopoverDispatch()
   const handles = useCssHandles(CSS_HANDLES)
+  const TransitionComponent = useTransition(transitionComponent)
 
   const classes = classnames(
     handles.paper,
@@ -66,20 +85,29 @@ export default function Popover(props: Props) {
   )
 
   return (
-    <Popper open={open} placement={placement} anchorEl={containerRef?.current}>
-      <OutsideClickHandler onOutsideClick={handleClose}>
-        <TrapFocus open={open}>
-          <div
-            role={role}
-            tabIndex={-1}
-            className={classes}
-            onClick={handleClick}
-            onKeyDown={handleKeydown}
-          >
-            {children}
-          </div>
-        </TrapFocus>
-      </OutsideClickHandler>
+    <Popper
+      transition
+      open={open}
+      placement={placement}
+      anchorEl={containerRef?.current}
+    >
+      {({ TransitionProps }: any) => (
+        <OutsideClickHandler onOutsideClick={handleClose}>
+          <TrapFocus open={open}>
+            <TransitionComponent {...TransitionProps}>
+              <div
+                role={role}
+                tabIndex={-1}
+                className={classes}
+                onClick={handleClick}
+                onKeyDown={handleKeydown}
+              >
+                {children}
+              </div>
+            </TransitionComponent>
+          </TrapFocus>
+        </OutsideClickHandler>
+      )}
     </Popper>
   )
 }

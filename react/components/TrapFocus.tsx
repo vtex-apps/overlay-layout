@@ -11,7 +11,7 @@ export default function TrapFocus(props: Props) {
 
   useEffect(() => {
     if (open && childRef.current) {
-      childRef.current.focus()
+      // childRef.current.focus()
     }
   }, [open])
 
