@@ -21,21 +21,19 @@ interface Props {
   transitionComponent: TransitionComponentType
 }
 
-function getTransitionComponent(option: TransitionComponentType) {
-  option = option.toLowerCase() as TransitionComponentType
-  switch (option) {
-    case 'fade':
-      return Fade
-    default:
-      return Fade
-  }
-}
-
 function useTransition(option: TransitionComponentType) {
-  return useMemo(() => getTransitionComponent(option), [option])
+  return useMemo(() => {
+    const lowerCaseOption = option.toLowerCase() as TransitionComponentType
+    switch (lowerCaseOption) {
+      case 'fade':
+        return Fade
+      default:
+        return Fade
+    }
+  }, [option])
 }
 
-const CSS_HANDLES = ['paper']
+const CSS_HANDLES = ['backgroundElement']
 
 export default function Popover(props: Props) {
   const { children, placement, role, transitionComponent = 'fade' } = props
@@ -44,8 +42,8 @@ export default function Popover(props: Props) {
   const handles = useCssHandles(CSS_HANDLES)
   const TransitionComponent = useTransition(transitionComponent)
 
-  const paperClasses = classnames(
-    handles.paper,
+  const backgroundElementClasses = classnames(
+    handles.backgroundElement,
     'outline-0 ma2 pa3 bg-base br bl bb bt b--muted-4 br2 w-100'
   )
 
@@ -54,7 +52,7 @@ export default function Popover(props: Props) {
       const triggerClicked = containerRef?.current?.contains(
         e.target as Node | null
       )
-      if (dispatch && !triggerClicked) {
+      if (!triggerClicked) {
         dispatch({ type: 'CLOSE_POPOVER' })
       }
     },
@@ -66,10 +64,7 @@ export default function Popover(props: Props) {
       if (e.key !== 'Escape' || triggerMode !== 'click') {
         return
       }
-
-      if (dispatch) {
-        dispatch({ type: 'CLOSE_POPOVER' })
-      }
+      dispatch({ type: 'CLOSE_POPOVER' })
     },
     [dispatch, triggerMode]
   )
@@ -77,6 +72,8 @@ export default function Popover(props: Props) {
   const handleClick = useCallback(
     (e: React.MouseEvent) => {
       if (triggerMode === 'click') {
+        // The Trigger works as a toggle, so if this event
+        // go up to the Trigger it will close the Popover
         e.stopPropagation()
         e.preventDefault()
       }
@@ -99,8 +96,8 @@ export default function Popover(props: Props) {
                 role={role}
                 tabIndex={-1}
                 onClick={handleClick}
-                className={paperClasses}
                 onKeyDown={handleKeydown}
+                className={backgroundElementClasses}
               >
                 {children}
               </div>

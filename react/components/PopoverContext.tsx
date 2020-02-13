@@ -39,8 +39,10 @@ type Action =
   | SetTriggerModeAction
 type Dispatch = (action: Action) => void
 
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const noop = () => {}
 const PopoverStateContext = createContext<State>(DEFAULT_STATE)
-const PopoverDispatchContext = createContext<Dispatch | undefined>(undefined)
+const PopoverDispatchContext = createContext<Dispatch>(noop)
 
 function popoverContextReducer(state: State = DEFAULT_STATE, action: Action) {
   switch (action.type) {
@@ -57,12 +59,12 @@ function popoverContextReducer(state: State = DEFAULT_STATE, action: Action) {
     case 'SET_CONTAINER_REF':
       return {
         ...state,
-        containerRef: action.payload?.containerRef,
+        containerRef: action.payload.containerRef,
       }
     case 'SET_TRIGGER_MODE':
       return {
         ...state,
-        triggerMode: action.payload?.triggerMode,
+        triggerMode: action.payload.triggerMode,
       }
     default:
       return state
@@ -82,8 +84,7 @@ export const PopoverContextProvider: React.FC = ({ children }) => {
 }
 
 export function usePopoverDispatch() {
-  const context = useContext(PopoverDispatchContext)
-  return context
+  return useContext(PopoverDispatchContext)
 }
 
 export function usePopoverState() {
