@@ -19,7 +19,10 @@ const TrapFocus = forwardRef(function TrapFocus(props: Props, ref) {
       // the scroll will go to the top of the page. That's why I have to use
       // the requestAnimationFrame
       requestAnimationFrame(() => {
-        childRef.current?.focus()
+        // And we need two because of IE11
+        requestAnimationFrame(() => {
+          childRef.current?.focus()
+        })
       })
     }
   }, [open])
