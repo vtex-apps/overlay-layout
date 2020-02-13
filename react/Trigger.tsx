@@ -73,17 +73,19 @@ function Trigger(props: Props) {
     }
   }
 
-  const handleMouseEnter = () => {
-    if (trigger === 'hover') {
-      dispatch({ type: 'OPEN_POPOVER' })
-    }
-  }
+  const handleMouseEnter =
+    trigger === 'hover'
+      ? () => {
+          dispatch({ type: 'OPEN_POPOVER' })
+        }
+      : undefined
 
-  const handleMouseLeave = () => {
-    if (trigger === 'hover') {
-      dispatch({ type: 'CLOSE_POPOVER' })
-    }
-  }
+  const handleMouseLeave =
+    trigger === 'hover'
+      ? () => {
+          dispatch({ type: 'CLOSE_POPOVER' })
+        }
+      : undefined
 
   const classes = classnames(
     handles.trigger,
