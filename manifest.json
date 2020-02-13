@@ -10,7 +10,8 @@
     "docs": "0.x"
   },
   "dependencies": {
-    "vtex.css-handles": "0.x"
+    "vtex.css-handles": "0.x",
+    "vtex.responsive-values": "0.x"
   },
   "policies": [],
   "$schema": "https://raw.githubusercontent.com/vtex/node-vtex-api/master/gen/manifest.schema"

@@ -1,11 +1,15 @@
+import {
+  useResponsiveValue,
+  MaybeResponsiveInput,
+} from 'vtex.responsive-values'
 import classnames from 'classnames'
 import { useCssHandles } from 'vtex.css-handles'
 import React, { useEffect, useRef } from 'react'
 
 import {
+  usePopoverState,
   usePopoverDispatch,
   PopoverContextProvider,
-  usePopoverState,
 } from './components/PopoverContext'
 
 const CSS_HANDLES = ['trigger']
@@ -14,13 +18,14 @@ export type TriggerMode = 'click' | 'hover'
 
 interface Props {
   children: React.ReactNode
-  trigger?: TriggerMode
+  trigger?: MaybeResponsiveInput<TriggerMode>
 }
 
 export type TriggerElement = HTMLDivElement & HTMLButtonElement
 
 function Trigger(props: Props) {
-  const { children, trigger = 'click' } = props
+  const { children, trigger: triggerProp = 'click' } = props
+  const trigger = useResponsiveValue(triggerProp)
   const dispatch = usePopoverDispatch()
   const { open } = usePopoverState()
   const containerRef = useRef<TriggerElement>(null)
