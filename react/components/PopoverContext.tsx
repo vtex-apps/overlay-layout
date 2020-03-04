@@ -1,15 +1,17 @@
 import React, { createContext, useReducer, useContext } from 'react'
 
-import { TriggerElement } from '../Trigger'
+import { TriggerElement, TriggerMode } from '../Trigger'
 
 interface State {
   open: boolean
   containerRef?: React.RefObject<TriggerElement> | null
+  triggerMode: TriggerMode
 }
 
-const DEFAULT_STATE = {
+const DEFAULT_STATE: State = {
   open: false,
   containerRef: null,
+  triggerMode: 'click',
 }
 
 interface OpenAction {
@@ -25,11 +27,22 @@ interface SetContainerRefAction {
   payload: { containerRef: React.RefObject<TriggerElement> }
 }
 
-type Action = OpenAction | CloseAction | SetContainerRefAction
+interface SetTriggerModeAction {
+  type: 'SET_TRIGGER_MODE'
+  payload: { triggerMode: TriggerMode }
+}
+
+type Action =
+  | OpenAction
+  | CloseAction
+  | SetContainerRefAction
+  | SetTriggerModeAction
 type Dispatch = (action: Action) => void
 
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const noop = () => {}
 const PopoverStateContext = createContext<State>(DEFAULT_STATE)
-const PopoverDispatchContext = createContext<Dispatch | undefined>(undefined)
+const PopoverDispatchContext = createContext<Dispatch>(noop)
 
 function popoverContextReducer(state: State = DEFAULT_STATE, action: Action) {
   switch (action.type) {
@@ -46,7 +59,12 @@ function popoverContextReducer(state: State = DEFAULT_STATE, action: Action) {
     case 'SET_CONTAINER_REF':
       return {
         ...state,
-        containerRef: action.payload?.containerRef,
+        containerRef: action.payload.containerRef,
+      }
+    case 'SET_TRIGGER_MODE':
+      return {
+        ...state,
+        triggerMode: action.payload.triggerMode,
       }
     default:
       return state
@@ -66,8 +84,7 @@ export const PopoverContextProvider: React.FC = ({ children }) => {
 }
 
 export function usePopoverDispatch() {
-  const context = useContext(PopoverDispatchContext)
-  return context
+  return useContext(PopoverDispatchContext)
 }
 
 export function usePopoverState() {
