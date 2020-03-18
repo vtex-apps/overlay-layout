@@ -1,6 +1,6 @@
 import React, { createContext, useReducer, useContext } from 'react'
 
-import { TriggerElement, TriggerMode } from '../Trigger'
+import { TriggerElement, TriggerMode } from './Trigger'
 
 interface State {
   open: boolean
@@ -94,4 +94,9 @@ export function usePopoverState() {
   }
 
   return context
+}
+
+export default {
+  usePopoverState,
+  usePopoverDispatch,
 }
