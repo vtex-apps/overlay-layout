@@ -16,7 +16,6 @@ import {
 } from '@popperjs/core'
 import { useCssHandles } from 'vtex.css-handles'
 
-import Portal from './Portal'
 import styles from '../styles.css'
 import setRef from '../modules/setRef'
 import useForkRef from '../modules/useForkRef'
@@ -171,17 +170,15 @@ const Popper = forwardRef(function Popper(props: Props, ref) {
   }
 
   return (
-    <Portal>
-      <div
-        role={role}
-        ref={handleRef}
-        style={{ position: 'fixed', left: 0, top: 0, ...style }}
-        className={`${styles.popper} ${handles.popper}`}
-        {...rest}
-      >
-        {typeof children === 'function' ? children(childProps) : children}
-      </div>
-    </Portal>
+    <div
+      role={role}
+      ref={handleRef}
+      style={{ position: 'fixed', left: 0, top: 0, ...style }}
+      className={`${styles.popper} ${handles.popper}`}
+      {...rest}
+    >
+      {typeof children === 'function' ? children(childProps) : children}
+    </div>
   )
 })
 
