@@ -10,9 +10,9 @@ import {
   usePopoverState,
   usePopoverDispatch,
   PopoverContextProvider,
-} from './components/PopoverContext'
+} from './PopoverContext'
 
-const CSS_HANDLES = ['trigger']
+const CSS_HANDLES = ['triggerContainer', 'trigger']
 
 export type TriggerMode = 'click' | 'hover'
 
@@ -30,7 +30,7 @@ function Trigger(props: Props) {
   const { open } = usePopoverState()
   const containerRef = useRef<TriggerElement>(null)
   const handles = useCssHandles(CSS_HANDLES)
-  const ContainerTag = trigger === 'click' ? 'button' : 'div'
+  const role = trigger === 'click' ? 'button' : undefined
 
   useEffect(() => {
     dispatch({
@@ -87,23 +87,27 @@ function Trigger(props: Props) {
         }
       : undefined
 
-  const classes = classnames(
+  const containerClasses = classnames(
     handles.trigger,
-    'outline-0 bg-transparent bn pa0 dib'
+    'outline-0 bg-transparent bn pa0 dib',
+    {
+      pointer: trigger === 'click',
+    }
   )
 
   return (
-    <ContainerTag
+    <div
+      role={role}
       tabIndex={0}
       ref={containerRef}
-      className={classes}
       onClick={handleClick}
       onKeyDown={handleKeydown}
+      className={containerClasses}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       {children}
-    </ContainerTag>
+    </div>
   )
 }
 

@@ -7,10 +7,7 @@ import Popper from './components/Popper'
 import TrapFocus from './components/TrapFocus'
 import Fade from './components/Animations/Fade'
 import OutsideClickHandler from './components/OutsideClickHandler'
-import {
-  usePopoverState,
-  usePopoverDispatch,
-} from './components/PopoverContext'
+import { usePopoverState, usePopoverDispatch } from './PopoverContext'
 
 type TransitionComponentType = 'fade'
 
@@ -44,7 +41,7 @@ export default function Popover(props: Props) {
 
   const backgroundElementClasses = classnames(
     handles.backgroundElement,
-    'outline-0 ma2 pa3 bg-base br bl bb bt b--muted-4 br2 w-100'
+    'outline-0 pv2 bg-base br bl bb bt b--muted-4 br2 w-100'
   )
 
   const handleClose = useCallback(

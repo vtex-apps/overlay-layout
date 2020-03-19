@@ -11,3 +11,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Intial release.
 - Support to trigger on hover.
 - Support to animations.
+- Export `PopoverContext`.
