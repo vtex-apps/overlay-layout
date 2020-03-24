@@ -14,26 +14,32 @@ import {
   Instance as PopperInstance,
   Placement as PopperPlacementType,
 } from '@popperjs/core'
+import classnames from 'classnames'
 import { useCssHandles } from 'vtex.css-handles'
 
+import styles from '../styles.css'
 import setRef from '../modules/setRef'
 import useForkRef from '../modules/useForkRef'
+import Backdrop, { BackdropMode } from './Backdrop'
+
+type AnchorElType =
+  | null
+  | VirtualElement
+  | (() => VirtualElement)
+  | React.RefObject<HTMLElement>
 
 interface Props
   extends React.DetailedHTMLProps<
     React.HTMLAttributes<HTMLDivElement>,
     HTMLDivElement
   > {
-  anchorEl?:
-    | null
-    | VirtualElement
-    | (() => VirtualElement)
-    | React.RefObject<HTMLElement>
-  children: React.ReactNode
-  open?: boolean
-  placement?: PopperPlacementType
-  transition?: boolean
   role?: string
+  open?: boolean
+  transition?: boolean
+  anchorEl?: AnchorElType
+  backdrop?: BackdropMode
+  children: React.ReactNode
+  placement?: PopperPlacementType
 }
 
 function getAnchorEl(anchorEl: React.ReactNode) {
@@ -44,11 +50,12 @@ const CSS_HANDLES = ['popper']
 
 const Popper = forwardRef(function Popper(props: Props, ref) {
   const {
-    role,
     anchorEl,
     children,
     open = false,
     transition = false,
+    backdrop = '',
+    role = 'presentation',
     placement: initialPlacement = 'bottom',
     ...rest
   } = props
@@ -91,6 +98,7 @@ const Popper = forwardRef(function Popper(props: Props, ref) {
 
     const popper = createPopper(getAnchorEl(anchorEl), tooltipRef.current, {
       placement: initialPlacement,
+      strategy: 'fixed',
       onFirstUpdate: handlePopperFirstUpdate,
       modifiers: [
         {
@@ -102,7 +110,7 @@ const Popper = forwardRef(function Popper(props: Props, ref) {
         {
           name: 'preventOverflow',
           options: {
-            mainAxis: false,
+            mainAxis: true,
             altAxis: false,
             ...(window && { boundary: window }),
           },
@@ -167,9 +175,12 @@ const Popper = forwardRef(function Popper(props: Props, ref) {
     }
   }
 
+  const classes = classnames(handles.popper, styles.dropdown)
+
   return (
-    <div role={role} ref={handleRef} className={handles.popper} {...rest}>
+    <div className={classes} role={role} ref={handleRef} {...rest}>
       {typeof children === 'function' ? children(childProps) : children}
+      {backdrop !== 'none' && <Backdrop open={open} />}
     </div>
   )
 })

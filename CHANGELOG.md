@@ -8,7 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 ### Added
-- Intial release.
+- Initial release.
 - Support to trigger on hover.
-- Support to animations.
+- Support for animations.
 - Export `PopoverContext`.
+- `backdrop` and `onScroll` props to the `popover-layout`.
