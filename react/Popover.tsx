@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo, useEffect } from 'react'
 import classnames from 'classnames'
 import { Placement } from '@popperjs/core'
 import { useCssHandles } from 'vtex.css-handles'
@@ -8,13 +8,17 @@ import TrapFocus from './components/TrapFocus'
 import Fade from './components/Animations/Fade'
 import OutsideClickHandler from './components/OutsideClickHandler'
 import { usePopoverState, usePopoverDispatch } from './PopoverContext'
+import useEventCallback from './modules/useEventCallback'
+import handleContainerStyle, { RestoreFn } from './modules/handleContainerStyle'
 
 type TransitionComponentType = 'fade'
 
 interface Props {
-  children: React.ReactNode
-  placement: Placement
   role?: string
+  placement: Placement
+  children: React.ReactNode
+  backdrop?: 'visible' | 'none'
+  scrollBehavior?: 'lock-page-scroll' | 'close-on-scroll' | 'default'
   transitionComponent: TransitionComponentType
 }
 
@@ -30,17 +34,24 @@ function useTransition(option: TransitionComponentType) {
   }, [option])
 }
 
-const CSS_HANDLES = ['backgroundElement']
+const CSS_HANDLES = ['container']
 
 export default function Popover(props: Props) {
-  const { children, placement, role, transitionComponent = 'fade' } = props
+  const {
+    role,
+    children,
+    placement,
+    backdrop = 'none',
+    scrollBehavior = 'default',
+    transitionComponent = 'fade',
+  } = props
   const { open, containerRef, triggerMode } = usePopoverState()
   const dispatch = usePopoverDispatch()
   const handles = useCssHandles(CSS_HANDLES)
   const TransitionComponent = useTransition(transitionComponent)
 
-  const backgroundElementClasses = classnames(
-    handles.backgroundElement,
+  const containerClasses = classnames(
+    handles.container,
     'outline-0 pv2 bg-base br bl bb bt b--muted-4 br2 w-100'
   )
 
@@ -66,6 +77,29 @@ export default function Popover(props: Props) {
     [dispatch, triggerMode]
   )
 
+  const closeOnScroll = useEventCallback((e: any) => {
+    e.preventDefault()
+    dispatch({ type: 'CLOSE_POPOVER' })
+  })
+
+  useEffect(() => {
+    let restore: RestoreFn | null = null
+    if (open) {
+      if (scrollBehavior === 'close-on-scroll') {
+        window.addEventListener('scroll', closeOnScroll)
+      } else if (scrollBehavior === 'lock-page-scroll') {
+        restore = handleContainerStyle(window?.document.body)
+      }
+    }
+
+    return () => {
+      window.removeEventListener('scroll', closeOnScroll)
+      if (restore) {
+        restore()
+      }
+    }
+  }, [closeOnScroll, scrollBehavior, open])
+
   const handleClick = useCallback(
     (e: React.MouseEvent) => {
       if (triggerMode === 'click') {
@@ -82,6 +116,7 @@ export default function Popover(props: Props) {
     <Popper
       transition
       open={open}
+      backdrop={backdrop === 'visible' ? 'clickable' : 'none'}
       placement={placement}
       anchorEl={containerRef?.current}
     >
@@ -94,7 +129,7 @@ export default function Popover(props: Props) {
                 tabIndex={-1}
                 onClick={handleClick}
                 onKeyDown={handleKeydown}
-                className={backgroundElementClasses}
+                className={containerClasses}
               >
                 {children}
               </div>

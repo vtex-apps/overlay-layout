@@ -56,7 +56,32 @@ This repository provides blocks that can help you create a Dropdown, Select or a
 
 | Prop name | Type | Description | Default value |
 | --- | --- | --- | --- |
-| placement | `Placement` | Describes the preferred placement of the popover. If there is no space to put the popover in the placement that you choose it will fit in a fallback position | `'bottom`' |
+| `placement` | `Placement` | Describes the preferred placement of the popover. If there is no space to put the popover in the placement that you choose it will fit in a fallback position | `'bottom`' |
+| `scrollBehavior` | `ScrollBehavior` | How the popover should behave if the user tries to scroll the page | `'default'` |
+| `backdrop` | `BackdropOptions` | If it should display a backdrop overlay | `'none'` |
+
+### Placement
+
+| Value | Description |
+| `'bottom'` | Render the Popover at the bottom of the `PopoverTrigger` |
+| `'left'` | Render the Popover at the left of the `PopoverTrigger` |
+| `'right'` | Render the Popover at the right of the `PopoverTrigger` |
+| `'top'` | Render the Popover at the top of the `PopoverTrigger` |
+
+### ScrollBehavior
+
+| Value | Description |
+| --- | --- |
+| `'lock-page-scroll'` | The user can't scroll |
+| `'close-on-scroll'` | If the user tries to scroll it will close the popover |
+| `'default'` | Doesn't do anything on scroll |
+
+### BackdropOptions
+
+| Value | Description |
+| --- | --- |
+| `'visible'` | Displays a backdrop overlay which blocks the click on other items of the page, if you click on the overlay it will close the popover |
+| `'none'` | Doesn't display any backdrop overlay and if you click any item in the page it will close the popover and click the element |
 
 ### PopoverTrigger
 
@@ -68,14 +93,6 @@ This repository provides blocks that can help you create a Dropdown, Select or a
 | --- | --- |
 | `'click'` | Open when you click the trigger |
 | `'hover'` | Open when you hover the trigger | 
-
-### Placement
-
-| Value | Description |
-| `'bottom'` | Render the Popover at the bottom of the `PopoverTrigger` |
-| `'left'` | Render the Popover at the left of the `PopoverTrigger` |
-| `'right'` | Render the Popover at the right of the `PopoverTrigger` |
-| `'top'` | Render the Popover at the top of the `PopoverTrigger` |
 
 ## Customization
 
