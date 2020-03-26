@@ -13,3 +13,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Support for animations.
 - Export `PopoverContext`.
 - `backdrop` and `onScroll` props to the `popover-layout`.
+- `arrow` and `offsets` props to `popover-layout`.

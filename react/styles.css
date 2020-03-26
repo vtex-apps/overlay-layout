@@ -9,3 +9,31 @@
 .dropdown {
   z-index: 900;
 }
+
+.arrow {
+  border-width: 1em;
+  border-style: solid;
+  position: absolute;
+  box-sizing: border-box;
+  font-size: 10px;
+}
+
+.popperArrow[data-popper-placement="bottom"] .arrow {
+  border-color: transparent transparent currentColor transparent;
+  top: -1.7em;
+}
+
+.popperArrow[data-popper-placement="top"] .arrow {
+  border-color: currentColor transparent transparent transparent;
+  bottom: -1.7em;
+}
+
+.popperArrow[data-popper-placement="right"] .arrow {
+  border-color: transparent currentColor transparent transparent;
+  left: -1.7em;
+}
+
+.popperArrow[data-popper-placement="left"] .arrow {
+  border-color: transparent transparent transparent currentColor;
+  right: -1.7em;
+}

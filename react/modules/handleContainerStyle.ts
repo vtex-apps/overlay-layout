@@ -44,6 +44,10 @@ export default function handleContainerStyle(
 
   const restore = () => {
     restoreStyle.forEach(({ value, el, key }) => {
+      if (!el) {
+        return
+      }
+
       if (value) {
         el.style.setProperty(key, value)
       } else {

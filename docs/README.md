@@ -59,21 +59,24 @@ This repository provides blocks that can help you create a Dropdown, Select or a
 | `placement` | `Placement` | Describes the preferred placement of the popover. If there is no space to put the popover in the placement that you choose it will fit in a fallback position | `'bottom`' |
 | `scrollBehavior` | `ScrollBehavior` | How the popover should behave if the user tries to scroll the page | `'default'` |
 | `backdrop` | `BackdropOptions` | If it should display a backdrop overlay | `'none'` |
+| `arrow`  | `boolean` | If it should display an arrow pointing to the `popover-trigger` element | `false` |
+| `offsets` | `Offsets` | Offsets of the `popover-layout` (Unit `px`) | `{ skidding: 0, distance: 0 }` |
 
 ### Placement
 
 | Value | Description |
-| `'bottom'` | Render the Popover at the bottom of the `PopoverTrigger` |
-| `'left'` | Render the Popover at the left of the `PopoverTrigger` |
-| `'right'` | Render the Popover at the right of the `PopoverTrigger` |
-| `'top'` | Render the Popover at the top of the `PopoverTrigger` |
+| --- | --- |
+| `'bottom'` | Render the `popover-layout` at the bottom of the `popover-trigger` |
+| `'left'` | Render the `popover-layout` at the left of the `popover-trigger` |
+| `'right'` | Render the `popover-layout` at the right of the `popover-trigger` |
+| `'top'` | Render the `popover-layout` at the top of the `popover-trigger` |
 
 ### ScrollBehavior
 
 | Value | Description |
 | --- | --- |
 | `'lock-page-scroll'` | The user can't scroll |
-| `'close-on-scroll'` | If the user tries to scroll it will close the popover |
+| `'close-on-scroll'` | If the user tries to scroll it will close the `popover-layout` |
 | `'default'` | Doesn't do anything on scroll |
 
 ### BackdropOptions
@@ -83,16 +86,26 @@ This repository provides blocks that can help you create a Dropdown, Select or a
 | `'visible'` | Displays a backdrop overlay which blocks the click on other items of the page, if you click on the overlay it will close the popover |
 | `'none'` | Doesn't display any backdrop overlay and if you click any item in the page it will close the popover and click the element |
 
+### Offsets
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `skidding` | `number` | Displaces the `popover-layout` along the `popover-trigger`. |
+| `distance` | `number` | Displaces the `popover-layout` away from, or toward, the `popover-trigger` in the direction of its placement. A positive number displaces it further away, while a negative number lets it overlap the `popover-trigger`. |
+
+
 ### PopoverTrigger
 
 | Prop name | Type | Description | Default value |
 | --- | --- | --- | --- |
-| trigger | `TriggerMode` | What kind of user action must happen to open the popover | `'click'` |
+| trigger | `TriggerMode` | What kind of user action must happen to open the `popover-layout` | `'click'` |
 
 ### TriggerMode
+
+| Value | Description |
 | --- | --- |
-| `'click'` | Open when you click the trigger |
-| `'hover'` | Open when you hover the trigger | 
+| `'click'` | Open when you click the `popover-trigger` |
+| `'hover'` | Open when you hover the `popover-trigger` | 
 
 ## Customization
 
@@ -100,9 +113,12 @@ In order to apply CSS customizations in this and other blocks, follow the instru
 
 | CSS Handles |
 | --- |
+| `arrow` |
+| `container` |
 | `outsideClickHandler` |
 | `paper` |
 | `popper` |
+| `popperArrow` |
 | `trigger` |
 
 ## Contributors ✨
