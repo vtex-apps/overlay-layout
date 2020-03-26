@@ -59,7 +59,7 @@ This repository provides blocks that can help you create a Dropdown, Select or a
 | `placement` | `Placement` | Describes the preferred placement of the popover. If there is no space to put the popover in the placement that you choose it will fit in a fallback position | `'bottom`' |
 | `scrollBehavior` | `ScrollBehavior` | How the popover should behave if the user tries to scroll the page | `'default'` |
 | `backdrop` | `BackdropOptions` | If it should display a backdrop overlay | `'none'` |
-| `arrow`  | `boolean` | If it should display an arrow pointing to the `popover-trigger` element | `false` |
+| `showArrow`  | `boolean` | If it should display an arrow pointing to the `popover-trigger` element | `false` |
 | `offsets` | `Offsets` | Offsets of the `popover-layout` (Unit `px`) | `{ skidding: 0, distance: 0 }` |
 
 ### Placement

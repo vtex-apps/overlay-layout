@@ -20,7 +20,7 @@ interface Offsets {
 
 interface Props {
   role?: string
-  arrow?: boolean
+  showArrow?: boolean
   children: React.ReactNode
   offsets?: Partial<Offsets>
   placement?: PopperPlacement
@@ -47,8 +47,8 @@ export default function Popover(props: Props) {
   const {
     role,
     children,
-    arrow = false,
     backdrop = 'none',
+    showArrow = false,
     placement = 'bottom',
     scrollBehavior = 'default',
     transitionComponent = 'fade',
@@ -145,7 +145,9 @@ export default function Popover(props: Props) {
                 onKeyDown={handleKeydown}
                 className={containerClasses}
               >
-                {arrow && <span className={arrowClasses} ref={setArrowRef} />}
+                {showArrow && (
+                  <span className={arrowClasses} ref={setArrowRef} />
+                )}
                 {children}
               </div>
             </TransitionComponent>

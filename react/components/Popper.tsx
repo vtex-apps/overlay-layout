@@ -223,7 +223,9 @@ const Popper = forwardRef(function Popper(props: Props, ref) {
   return (
     <div className={classes} role={role} ref={handleRef} {...rest}>
       {typeof children === 'function' ? children(childProps) : children}
-      {backdrop !== 'none' && <Backdrop open={open} />}
+      {backdrop !== 'none' && (
+        <Backdrop open={open} exited={!transition || exited} />
+      )}
     </div>
   )
 })

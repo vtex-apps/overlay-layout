@@ -12,6 +12,7 @@ import {
 import { duration } from '../../modules/transitionsConstants'
 import createTransition from '../../modules/createTransition'
 import getTransitionProps from '../../modules/getTransitionProps'
+import useForkRef from '../../modules/useForkRef'
 
 interface Props {
   in?: boolean
@@ -50,6 +51,7 @@ const Fade = React.forwardRef(function Fade(
     ...other
   } = props
 
+  const handleRef = useForkRef(ref, (children as any).ref)
   const handleEnter: EnterHandler = (node, isAppearing) => {
     const transitionProps = getTransitionProps({ timeout }, { mode: 'enter' })
     // support for older versions of android browser and safari
@@ -83,7 +85,7 @@ const Fade = React.forwardRef(function Fade(
     >
       {(state: TransitionStatus) => {
         return React.cloneElement(children, {
-          ref,
+          ref: handleRef,
           style: {
             opacity: getOpacity(state),
             visibility: state === 'exited' && !inProp ? 'hidden' : undefined,
