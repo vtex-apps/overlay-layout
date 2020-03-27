@@ -12,7 +12,7 @@ interface Props {
   onOutsideClick?: EventListener
 }
 
-const CSS_HANDLES = ['outsideClickHandler']
+const CSS_HANDLES = ['outsideClickHandler'] as const
 
 const OutsideClickHandler = forwardRef(function OutsideClickHandler(
   props: Props,

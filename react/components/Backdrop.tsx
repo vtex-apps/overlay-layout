@@ -15,7 +15,7 @@ interface Props {
   onClick?: (e: React.MouseEvent<HTMLDivElement>) => void
 }
 
-const CSS_HANDLES = ['backdropContainer', 'backdrop']
+const CSS_HANDLES = ['backdropContainer', 'backdrop'] as const
 
 function restoreOverflowX(
   valueRef: React.MutableRefObject<string | undefined>,

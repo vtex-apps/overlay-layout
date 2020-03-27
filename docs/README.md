@@ -52,7 +52,7 @@ This repository provides blocks that can help you create a Dropdown, Select or a
 }
 ```
 
-### Popover
+## popover-layout
 
 | Prop name | Type | Description | Default value |
 | --- | --- | --- | --- |
@@ -62,7 +62,7 @@ This repository provides blocks that can help you create a Dropdown, Select or a
 | `showArrow`  | `boolean` | If it should display an arrow pointing to the `popover-trigger` element | `false` |
 | `offsets` | `Offsets` | Offsets of the `popover-layout` (Unit `px`) | `{ skidding: 0, distance: 0 }` |
 
-### Placement
+#### Placement
 
 | Value | Description |
 | --- | --- |
@@ -71,7 +71,7 @@ This repository provides blocks that can help you create a Dropdown, Select or a
 | `'right'` | Render the `popover-layout` at the right of the `popover-trigger` |
 | `'top'` | Render the `popover-layout` at the top of the `popover-trigger` |
 
-### ScrollBehavior
+#### ScrollBehavior
 
 | Value | Description |
 | --- | --- |
@@ -79,14 +79,14 @@ This repository provides blocks that can help you create a Dropdown, Select or a
 | `'close-on-scroll'` | If the user tries to scroll it will close the `popover-layout` |
 | `'default'` | Doesn't do anything on scroll |
 
-### BackdropOptions
+#### BackdropOptions
 
 | Value | Description |
 | --- | --- |
 | `'visible'` | Displays a backdrop overlay which blocks the click on other items of the page, if you click on the overlay it will close the popover |
 | `'none'` | Doesn't display any backdrop overlay and if you click any item in the page it will close the popover and click the element |
 
-### Offsets
+#### Offsets
 
 | Property | Type | Description |
 | --- | --- | --- |
@@ -94,13 +94,13 @@ This repository provides blocks that can help you create a Dropdown, Select or a
 | `distance` | `number` | Displaces the `popover-layout` away from, or toward, the `popover-trigger` in the direction of its placement. A positive number displaces it further away, while a negative number lets it overlap the `popover-trigger`. |
 
 
-### PopoverTrigger
+## popover-trigger
 
 | Prop name | Type | Description | Default value |
 | --- | --- | --- | --- |
 | trigger | `TriggerMode` | What kind of user action must happen to open the `popover-layout` | `'click'` |
 
-### TriggerMode
+#### TriggerMode
 
 | Value | Description |
 | --- | --- |

@@ -55,7 +55,7 @@ function getAnchorEl(anchorEl: React.ReactNode) {
   return typeof anchorEl === 'function' ? anchorEl() : anchorEl
 }
 
-const CSS_HANDLES = ['popper', 'popperArrow']
+const CSS_HANDLES = ['popper', 'popperArrow'] as const
 
 const defaultOffsets: Offsets = {
   distance: 0,

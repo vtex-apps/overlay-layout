@@ -41,7 +41,7 @@ function useTransition(option: TransitionComponentType) {
   }, [option])
 }
 
-const CSS_HANDLES = ['container', 'arrow']
+const CSS_HANDLES = ['container', 'arrow'] as const
 
 export default function Popover(props: Props) {
   const {
