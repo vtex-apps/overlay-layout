@@ -5,6 +5,7 @@ import React, {
   forwardRef,
   useCallback,
   MutableRefObject,
+  useMemo,
 } from 'react'
 import {
   createPopper,
@@ -12,6 +13,7 @@ import {
   ModifierArguments,
   State as PopperState,
   Instance as PopperInstance,
+  Modifier as PopperModifier,
   Placement as PopperPlacementType,
 } from '@popperjs/core'
 import classnames from 'classnames'
@@ -21,6 +23,11 @@ import styles from '../styles.css'
 import setRef from '../modules/setRef'
 import useForkRef from '../modules/useForkRef'
 import Backdrop, { BackdropMode } from './Backdrop'
+
+interface Offsets {
+  distance: number
+  skidding: number
+}
 
 type AnchorElType =
   | null
@@ -39,6 +46,8 @@ interface Props
   anchorEl?: AnchorElType
   backdrop?: BackdropMode
   children: React.ReactNode
+  offsets?: Partial<Offsets>
+  arrowEl?: HTMLElement | null
   placement?: PopperPlacementType
 }
 
@@ -46,16 +55,23 @@ function getAnchorEl(anchorEl: React.ReactNode) {
   return typeof anchorEl === 'function' ? anchorEl() : anchorEl
 }
 
-const CSS_HANDLES = ['popper']
+const CSS_HANDLES = ['popper', 'popperArrow'] as const
+
+const defaultOffsets: Offsets = {
+  distance: 0,
+  skidding: 0,
+}
 
 const Popper = forwardRef(function Popper(props: Props, ref) {
   const {
+    arrowEl,
     anchorEl,
     children,
     open = false,
-    transition = false,
     backdrop = '',
+    transition = false,
     role = 'presentation',
+    offsets: offsetsProp = defaultOffsets,
     placement: initialPlacement = 'bottom',
     ...rest
   } = props
@@ -77,6 +93,51 @@ const Popper = forwardRef(function Popper(props: Props, ref) {
     }
   })
 
+  const popperModifiers = useMemo(() => {
+    const handlePopperUpdate = (data: ModifierArguments<{}>) => {
+      setPlacement(data.state.placement)
+    }
+
+    const { distance, skidding } = {
+      ...defaultOffsets,
+      ...offsetsProp,
+    }
+
+    const modifiers: Partial<PopperModifier<unknown>>[] = [
+      {
+        name: 'afterWrite',
+        enabled: true,
+        phase: 'afterWrite',
+        fn: handlePopperUpdate,
+      },
+      {
+        name: 'preventOverflow',
+        options: {
+          mainAxis: true,
+          altAxis: false,
+          ...(window && { boundary: window }),
+        },
+      },
+      {
+        name: 'offset',
+        options: {
+          offset: [skidding, distance],
+        },
+      },
+    ]
+
+    if (arrowEl) {
+      modifiers.push({
+        name: 'arrow',
+        options: {
+          element: arrowEl,
+        },
+      })
+    }
+
+    return modifiers
+  }, [arrowEl, offsetsProp])
+
   const handleOpen = useCallback(() => {
     if (!tooltipRef.current || !open) {
       return
@@ -92,33 +153,13 @@ const Popper = forwardRef(function Popper(props: Props, ref) {
       }
     }
 
-    const handlePopperUpdate = (data: ModifierArguments<{}>) => {
-      setPlacement(data.state.placement)
-    }
-
     const popper = createPopper(getAnchorEl(anchorEl), tooltipRef.current, {
+      modifiers: popperModifiers,
       placement: initialPlacement,
-      strategy: 'fixed',
       onFirstUpdate: handlePopperFirstUpdate,
-      modifiers: [
-        {
-          name: 'afterWrite',
-          enabled: true,
-          phase: 'afterWrite',
-          fn: handlePopperUpdate,
-        },
-        {
-          name: 'preventOverflow',
-          options: {
-            mainAxis: true,
-            altAxis: false,
-            ...(window && { boundary: window }),
-          },
-        },
-      ],
     })
     popperRef.current = popper
-  }, [open, initialPlacement, anchorEl])
+  }, [open, anchorEl, initialPlacement, popperModifiers])
 
   const handleRef = useCallback(
     node => {
@@ -175,12 +216,16 @@ const Popper = forwardRef(function Popper(props: Props, ref) {
     }
   }
 
-  const classes = classnames(handles.popper, styles.dropdown)
+  const classes = classnames(handles.popper, styles.dropdown, {
+    [handles.popperArrow]: Boolean(arrowEl),
+  })
 
   return (
     <div className={classes} role={role} ref={handleRef} {...rest}>
       {typeof children === 'function' ? children(childProps) : children}
-      {backdrop !== 'none' && <Backdrop open={open} />}
+      {backdrop !== 'none' && (
+        <Backdrop open={open} exited={!transition || exited} />
+      )}
     </div>
   )
 })

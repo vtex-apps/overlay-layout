@@ -12,7 +12,7 @@ import {
   PopoverContextProvider,
 } from './PopoverContext'
 
-const CSS_HANDLES = ['triggerContainer', 'trigger']
+const CSS_HANDLES = ['trigger'] as const
 
 export type TriggerMode = 'click' | 'hover'
 

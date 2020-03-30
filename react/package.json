@@ -18,6 +18,7 @@
     "@types/react-transition-group": "^4.2.3",
     "@vtex/test-tools": "^3.0.0",
     "@vtex/tsconfig": "^0.3.0",
+    "vtex.css-handles": "http://vtex.vtexassets.com/_v/public/typings/v1/vtex.css-handles@0.4.2/public/@types/vtex.css-handles",
     "typescript": "3.8.3"
   }
 }

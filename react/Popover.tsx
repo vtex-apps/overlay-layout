@@ -1,7 +1,7 @@
-import React, { useCallback, useMemo, useEffect } from 'react'
+import React, { useCallback, useMemo, useEffect, useState } from 'react'
 import classnames from 'classnames'
-import { Placement } from '@popperjs/core'
 import { useCssHandles } from 'vtex.css-handles'
+import { Placement as PopperPlacement } from '@popperjs/core'
 
 import Popper from './components/Popper'
 import TrapFocus from './components/TrapFocus'
@@ -13,10 +13,17 @@ import handleContainerStyle, { RestoreFn } from './modules/handleContainerStyle'
 
 type TransitionComponentType = 'fade'
 
+interface Offsets {
+  distance: number
+  skidding: number
+}
+
 interface Props {
   role?: string
-  placement: Placement
+  showArrow?: boolean
   children: React.ReactNode
+  offsets?: Partial<Offsets>
+  placement?: PopperPlacement
   backdrop?: 'visible' | 'none'
   scrollBehavior?: 'lock-page-scroll' | 'close-on-scroll' | 'default'
   transitionComponent: TransitionComponentType
@@ -34,26 +41,24 @@ function useTransition(option: TransitionComponentType) {
   }, [option])
 }
 
-const CSS_HANDLES = ['container']
+const CSS_HANDLES = ['container', 'arrow'] as const
 
 export default function Popover(props: Props) {
   const {
     role,
     children,
-    placement,
     backdrop = 'none',
+    showArrow = false,
+    placement = 'bottom',
     scrollBehavior = 'default',
     transitionComponent = 'fade',
+    offsets,
   } = props
   const { open, containerRef, triggerMode } = usePopoverState()
   const dispatch = usePopoverDispatch()
   const handles = useCssHandles(CSS_HANDLES)
+  const [arrowRef, setArrowRef] = useState<HTMLElement | null>(null)
   const TransitionComponent = useTransition(transitionComponent)
-
-  const containerClasses = classnames(
-    handles.container,
-    'outline-0 pv2 bg-base br bl bb bt b--muted-4 br2 w-100'
-  )
 
   const handleClose = useCallback(
     (e: Event) => {
@@ -112,13 +117,22 @@ export default function Popover(props: Props) {
     [triggerMode]
   )
 
+  const containerClasses = classnames(
+    handles.container,
+    'outline-0 pv2 bg-base br bl bb bt b--muted-4 br2 w-100'
+  )
+
+  const arrowClasses = classnames(handles.arrow, 'c-on-base--inverted')
+
   return (
     <Popper
       transition
       open={open}
-      backdrop={backdrop === 'visible' ? 'clickable' : 'none'}
+      offsets={offsets}
+      arrowEl={arrowRef}
       placement={placement}
       anchorEl={containerRef?.current}
+      backdrop={backdrop === 'visible' ? 'clickable' : 'none'}
     >
       {({ TransitionProps }: any) => (
         <OutsideClickHandler onOutsideClick={handleClose}>
@@ -131,6 +145,9 @@ export default function Popover(props: Props) {
                 onKeyDown={handleKeydown}
                 className={containerClasses}
               >
+                {showArrow && (
+                  <span className={arrowClasses} ref={setArrowRef} />
+                )}
                 {children}
               </div>
             </TransitionComponent>
