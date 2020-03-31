@@ -1,15 +1,18 @@
-📢 Don't fork this project. Use, [contribute](https://github.com/vtex-apps/popover-layout), or open issues through [Store Discussion](https://github.com/vtex-apps/store-discussion).
+📢 Use this project, [contribute](https://github.com/vtex-apps/popover-layout) to it or open issues to help evolve it using [Store Discussion](https://github.com/vtex-apps/store-discussion).
+
+# Popover Layout
+
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-0-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-# [DO NOT USE THIS] Popover Layout
+The Popover Layout app provides blocks that help you create a Dropdown, Select or a Tooltip component.
 
-This repository provides blocks that can help you create a Dropdown, Select or a Tooltip component.
+Foto/Gif exemplo 
 
 ## Configuration
 
-1. Import the popover layout app to your theme's dependencies in the `manifest.json`, for example:
+1. Add the Popover Layout app to your theme's dependencies in the `manifest.json`, for example:
 
 ```jsonc
 {
@@ -19,7 +22,14 @@ This repository provides blocks that can help you create a Dropdown, Select or a
 }
 ```
 
-2. Now you can use the two blocks exported by `vtex.popover-layout`. Notice that you need to configure your own popover-layout and pass it as a child of popover-trigger.
+Now you can use the two blocks exported by the Popover Layout app: 
+
+Block name | Description |
+| --------------------| -------- |
+| `popover-layout` | Add a description for `popover-layout`. |
+| `popover-trigger` | Add a description for `popover-trigger`.|
+
+2.  In any desired theme template, add the `popover-trigger` and then declare it using a block of your choosing and the `popover-layout`:
 
 ```jsonc
 {
@@ -29,9 +39,22 @@ This repository provides blocks that can help you create a Dropdown, Select or a
       "popover-layout"    
     ]
   },
+```
+
+Notice that the `popover-trigger` is not rendered. Following the example stated above, the `rich-text` block will be the one rendered and responsible for effectively triggering the Popover Layout content. 
+
+### `popover-trigger` props
+
+| Prop name | Type | Description | Default value |
+| --- | --- | --- | --- |
+| `trigger` | `Enum` | Defines whether the `popover-layout` will be opened by click (`click`) or hover (`hover`).| `click` |
+
+3. Configure the chosen trigger [block](https://vtex.io/docs/apps/all) and declare the `popover-layout` using its props. For example:
+
+```jsonc
   "rich-text#question": {
     "props": {
-      "text": "**Click to open the popoer layout**",
+      "text": "**Click to open the popover layout**",
       "blockClass": "question"
     }
   },
@@ -52,60 +75,24 @@ This repository provides blocks that can help you create a Dropdown, Select or a
 }
 ```
 
-## popover-layout
+The `popover-layout` is a wrapper block and works as the `popover-trigger`. This means that it is not properly rendered. Instead, you will have to pass to it a children block that will be responsible for rendering the Popover Layout content. 
+
+### `popover-layout` props
 
 | Prop name | Type | Description | Default value |
 | --- | --- | --- | --- |
-| `placement` | `Placement` | Describes the preferred placement of the popover. If there is no space to put the popover in the placement that you choose it will fit in a fallback position | `'bottom`' |
-| `scrollBehavior` | `ScrollBehavior` | How the popover should behave if the user tries to scroll the page | `'default'` |
-| `backdrop` | `BackdropOptions` | If it should display a backdrop overlay | `'none'` |
-| `showArrow`  | `boolean` | If it should display an arrow pointing to the `popover-trigger` element | `false` |
-| `offsets` | `Offsets` | Offsets of the `popover-layout` (Unit `px`) | `{ skidding: 0, distance: 0 }` |
+| `placement` | `Enum` | Defines the popover placement. Possible values are: `bottom`, `left`, `right` or `top`.  If there is no space to put the popover in the placement that you choose, it will fit in a fallback position. | `bottom` |
+| `scrollBehavior` | `Enum` | Popover Layout behavior when users try to scroll the page. Possible values are: `lock-page-scroll` (in which users can't scroll), `close-on-scroll` (Popover is closed when users are scrolling) or `default` (Scroll does not affect the Popover). | `default` |
+| `backdrop` | `Enum` | Once the Popover is rendered, it defines whether a backdrop overlay will be displayed (`visible`) or not (`none`). When set as `visible`, the backdrop overlay will close the Popover when clicked on. Otherwise, the Popover will be closed only if any component from the page is clicked on. | `none` |
+| `showArrow`  | `Boolean` | Whether an arrow pointing to the `popover-trigger` component should be displayed (`true`) or not (`false`). | `false` |
+| `offsets` | `Array` | Offsets of the `popover-layout` (Unit = `px`) | `{ skidding: 0, distance: 0 }` |
 
-#### Placement
+- **`offsets` array:**
 
-| Value | Description |
-| --- | --- |
-| `'bottom'` | Render the `popover-layout` at the bottom of the `popover-trigger` |
-| `'left'` | Render the `popover-layout` at the left of the `popover-trigger` |
-| `'right'` | Render the `popover-layout` at the right of the `popover-trigger` |
-| `'top'` | Render the `popover-layout` at the top of the `popover-trigger` |
-
-#### ScrollBehavior
-
-| Value | Description |
-| --- | --- |
-| `'lock-page-scroll'` | The user can't scroll |
-| `'close-on-scroll'` | If the user tries to scroll it will close the `popover-layout` |
-| `'default'` | Doesn't do anything on scroll |
-
-#### BackdropOptions
-
-| Value | Description |
-| --- | --- |
-| `'visible'` | Displays a backdrop overlay which blocks the click on other items of the page, if you click on the overlay it will close the popover |
-| `'none'` | Doesn't display any backdrop overlay and if you click any item in the page it will close the popover and click the element |
-
-#### Offsets
-
-| Property | Type | Description |
+| Prop | Type | Description |
 | --- | --- | --- |
-| `skidding` | `number` | Displaces the `popover-layout` along the `popover-trigger`. |
-| `distance` | `number` | Displaces the `popover-layout` away from, or toward, the `popover-trigger` in the direction of its placement. A positive number displaces it further away, while a negative number lets it overlap the `popover-trigger`. |
-
-
-## popover-trigger
-
-| Prop name | Type | Description | Default value |
-| --- | --- | --- | --- |
-| trigger | `TriggerMode` | What kind of user action must happen to open the `popover-layout` | `'click'` |
-
-#### TriggerMode
-
-| Value | Description |
-| --- | --- |
-| `'click'` | Open when you click the `popover-trigger` |
-| `'hover'` | Open when you hover the `popover-trigger` | 
+| `skidding` | `Number` | Displaces the `popover-layout` along the `popover-trigger`. |
+| `distance` | `Number` | Displaces the `popover-layout` away from, or toward, the `popover-trigger` in the direction of its placement. A positive number displaces it further away, while a negative number lets it overlap the `popover-trigger`. |
 
 ## Customization
 
@@ -123,8 +110,6 @@ In order to apply CSS customizations in this and other blocks, follow the instru
 
 ## Contributors ✨
 
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
-
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
@@ -132,4 +117,6 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind are welcome!
+
+
