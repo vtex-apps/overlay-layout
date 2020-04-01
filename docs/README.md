@@ -1,64 +1,66 @@
-📢 Use this project, [contribute](https://github.com/vtex-apps/popover-layout) to it or open issues to help evolve it using [Store Discussion](https://github.com/vtex-apps/store-discussion).
+📢 Use this project, [contribute](https://github.com/vtex-apps/overlay-layout) to it or open issues to help evolve it using [Store Discussion](https://github.com/vtex-apps/store-discussion).
 
-# Popover Layout
+# Overlay Layout
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-0-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-The Popover Layout app provides blocks that help you create a Dropdown, Select or a Tooltip component.
+The Overlay Layout app provides blocks that help you create a Dropdown, Select or a Tooltip component.
 
-Foto/Gif exemplo 
+![overlay-layout](https://user-images.githubusercontent.com/52087100/78159134-881f2100-7418-11ea-94e1-d70343cd021f.gif)
+
+*Example of a [Locale Switcher](https://vtex.io/docs/components/all/vtex.locale-switcher@0.5.5) using the Overlay Layout*. 
 
 ## Configuration
 
-1. Add the Popover Layout app to your theme's dependencies in the `manifest.json`, for example:
+1. Add the Overlay Layout app to your theme's dependencies in the `manifest.json`, for example:
 
 ```jsonc
 {
   "dependencies": {
-    "vtex.popover-layout": "0.x"
+    "vtex.overlay-layout": "0.x"
   }
 }
 ```
 
-Now you can use the two blocks exported by the Popover Layout app: 
+Now you can use the two blocks exported by the app: 
 
 Block name | Description |
 | --------------------| -------- |
-| `popover-layout` | Add a description for `popover-layout`. |
-| `popover-trigger` | Add a description for `popover-trigger`.|
+| `overlay-trigger` | Declares a renderable children block responsible for triggering the `overlay-layout` content. |
+| `overlay-layout` | Declares a renderable children block responsible for building the   |
 
-2.  In any desired theme template, add the `popover-trigger` and then declare it using a block of your choosing and the `popover-layout`:
+2.  In any desired theme template, add the `overlay-trigger` and then declare it using a block of your choosing and the `overlay-layout`:
 
 ```jsonc
 {
-  "popover-trigger": {
+  "overlay-trigger": {
     "children": [
       "rich-text#question",
-      "popover-layout"    
+      "overlay-layout"    
     ]
   },
 ```
 
-Notice that the `popover-trigger` is not rendered. Following the example stated above, the `rich-text` block will be the one rendered and responsible for effectively triggering the Popover Layout content. 
+Notice that the `overlay-trigger` is not rendered. Following the example stated above, the `rich-text` block will be the one rendered and responsible for effectively triggering the Overlay Layout content (defined by the children block of `overlay-layout`).
 
-### `popover-trigger` props
+### `overlay-trigger` props
 
 | Prop name | Type | Description | Default value |
 | --- | --- | --- | --- |
 | `trigger` | `Enum` | Defines whether the `popover-layout` will be opened by click (`click`) or hover (`hover`).| `click` |
 
-3. Configure the chosen trigger [block](https://vtex.io/docs/apps/all) and declare the `popover-layout` using its props. For example:
+3. Configure the chosen trigger [block](https://vtex.io/docs/apps/all) and declare the `overlay-layout` using its props. For example:
 
 ```jsonc
   "rich-text#question": {
     "props": {
-      "text": "**Click to open the popover layout**",
+      "text": "**Click to open the Overlay Layout**",
       "blockClass": "question"
     }
   },
-  "popover-layout": {
+  "overlay-layout": {
     "props": {
       "placement": "left"
     },
@@ -75,24 +77,24 @@ Notice that the `popover-trigger` is not rendered. Following the example stated 
 }
 ```
 
-The `popover-layout` is a wrapper block and works as the `popover-trigger`. This means that it is not properly rendered. Instead, you will have to pass to it a children block that will be responsible for rendering the Popover Layout content. 
+The `overlay-layout` defines which block will be rendered in order to build the Overlay Layout content. This means that you will have to pass to it a children block to be rendered. 
 
-### `popover-layout` props
+### `overlay-layout` props
 
 | Prop name | Type | Description | Default value |
 | --- | --- | --- | --- |
-| `placement` | `Enum` | Defines the popover placement. Possible values are: `bottom`, `left`, `right` or `top`.  If there is no space to put the popover in the placement that you choose, it will fit in a fallback position. | `bottom` |
-| `scrollBehavior` | `Enum` | Popover Layout behavior when users try to scroll the page. Possible values are: `lock-page-scroll` (in which users can't scroll), `close-on-scroll` (Popover is closed when users are scrolling) or `default` (Scroll does not affect the Popover). | `default` |
-| `backdrop` | `Enum` | Once the Popover is rendered, it defines whether a backdrop overlay will be displayed (`visible`) or not (`none`). When set as `visible`, the backdrop overlay will close the Popover when clicked on. Otherwise, the Popover will be closed only if any component from the page is clicked on. | `none` |
-| `showArrow`  | `Boolean` | Whether an arrow pointing to the `popover-trigger` component should be displayed (`true`) or not (`false`). | `false` |
-| `offsets` | `Array` | Offsets of the `popover-layout` (Unit = `px`) | `{ skidding: 0, distance: 0 }` |
+| `placement` | `Enum` | Defines the Overlay Layout content placement when it is triggered according to the Trigger component positioning. Possible values are: `bottom`, `left`, `right` or `top`.  If there is no page space in the placement that you choose, it will fit in a fallback position. | `bottom` |
+| `scrollBehavior` | `Enum` | Defines the Overlay Layout content behavior when users try to scroll the page. Possible values are: `lock-page-scroll` (in which users can't scroll), `close-on-scroll` (the block is closed when users start scrolling) or `default` (Scroll does not affect the Overlay Layout content). | `default` |
+| `backdrop` | `Enum` | Once the Overlay Layout content is rendered, it defines whether a backdrop overlay will be displayed (`visible`) or not (`none`). When set as `visible`, the backdrop will close Overlay Layout content when clicked on. Otherwise, the content will be closed only if any component from the page is clicked on. | `none` |
+| `showArrow`  | `Boolean` | Whether an arrow pointing to the `overlay-trigger` component should be displayed on UI(`true`) or not (`false`). | `false` |
+| `offsets` | `Object` | Defines the `overlay-layout` component positioning when compared to the `overlay-trigger` (unit used is `px`). For more details, check out the `offsets` object table stated below. | `{ skidding: 0, distance: 0 }` |
 
-- **`offsets` array:**
+- **`offsets` object:**
 
 | Prop | Type | Description |
 | --- | --- | --- |
-| `skidding` | `Number` | Displaces the `popover-layout` along the `popover-trigger`. |
-| `distance` | `Number` | Displaces the `popover-layout` away from, or toward, the `popover-trigger` in the direction of its placement. A positive number displaces it further away, while a negative number lets it overlap the `popover-trigger`. |
+| `skidding` | `Number` | Defines the `overlay-layout` component positioning side by side with the `overlay-trigger`. |
+| `distance` | `Number` | Defines the distance between the `overlay-layout` and the `overlay-trigger` components in the UI. A positive number places the `overlay-layout` component farther, while a negative number lets it overlap the `overlay-trigger`. |
 
 ## Customization
 
