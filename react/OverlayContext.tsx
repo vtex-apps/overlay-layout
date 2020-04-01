@@ -15,11 +15,11 @@ const DEFAULT_STATE: State = {
 }
 
 interface OpenAction {
-  type: 'OPEN_POPOVER'
+  type: 'OPEN_OVERLAY'
 }
 
 interface CloseAction {
-  type: 'CLOSE_POPOVER'
+  type: 'CLOSE_OVERLAY'
 }
 
 interface SetContainerRefAction {
@@ -41,17 +41,17 @@ type Dispatch = (action: Action) => void
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {}
-const PopoverStateContext = createContext<State>(DEFAULT_STATE)
-const PopoverDispatchContext = createContext<Dispatch>(noop)
+const OverlayStateContext = createContext<State>(DEFAULT_STATE)
+const OverlayDispatchContext = createContext<Dispatch>(noop)
 
-function popoverContextReducer(state: State = DEFAULT_STATE, action: Action) {
+function overlayContextReducer(state: State = DEFAULT_STATE, action: Action) {
   switch (action.type) {
-    case 'OPEN_POPOVER':
+    case 'OPEN_OVERLAY':
       return {
         ...state,
         open: true,
       }
-    case 'CLOSE_POPOVER':
+    case 'CLOSE_OVERLAY':
       return {
         ...state,
         open: false,
@@ -71,32 +71,32 @@ function popoverContextReducer(state: State = DEFAULT_STATE, action: Action) {
   }
 }
 
-export const PopoverContextProvider: React.FC = ({ children }) => {
-  const [state, dispatch] = useReducer(popoverContextReducer, DEFAULT_STATE)
+export const OverlayContextProvider: React.FC = ({ children }) => {
+  const [state, dispatch] = useReducer(overlayContextReducer, DEFAULT_STATE)
 
   return (
-    <PopoverStateContext.Provider value={state}>
-      <PopoverDispatchContext.Provider value={dispatch}>
+    <OverlayStateContext.Provider value={state}>
+      <OverlayDispatchContext.Provider value={dispatch}>
         {children}
-      </PopoverDispatchContext.Provider>
-    </PopoverStateContext.Provider>
+      </OverlayDispatchContext.Provider>
+    </OverlayStateContext.Provider>
   )
 }
 
-export function usePopoverDispatch() {
-  return useContext(PopoverDispatchContext)
+export function useOverlayDispatch() {
+  return useContext(OverlayDispatchContext)
 }
 
-export function usePopoverState() {
-  const context = useContext(PopoverStateContext)
+export function useOverlayState() {
+  const context = useContext(OverlayStateContext)
   if (typeof context === 'undefined') {
-    throw Error('usePopoverState must be used within a PopoverStateContext')
+    throw Error('useOverlayState must be used within a OverlayStateContext')
   }
 
   return context
 }
 
 export default {
-  usePopoverState,
-  usePopoverDispatch,
+  useOverlayState,
+  useOverlayDispatch,
 }

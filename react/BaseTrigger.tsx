@@ -5,10 +5,10 @@ import {
 import React, { useEffect, useRef } from 'react'
 
 import {
-  usePopoverState,
-  usePopoverDispatch,
-  PopoverContextProvider,
-} from './PopoverContext'
+  useOverlayState,
+  useOverlayDispatch,
+  OverlayContextProvider,
+} from './OverlayContext'
 import useForkRef from './modules/useForkRef'
 
 export type TriggerMode = 'click' | 'hover'
@@ -32,8 +32,8 @@ const BaseTrigger = React.forwardRef(function BaseTrigger(
     ...rest
   } = props
   const trigger = useResponsiveValue(triggerProp)
-  const dispatch = usePopoverDispatch()
-  const { open } = usePopoverState()
+  const dispatch = useOverlayDispatch()
+  const { open } = useOverlayState()
   const containerRef = useRef<HTMLElement>(null)
   const handleRef = useForkRef(containerRef, ref)
   const role = trigger === 'click' ? 'button' : undefined
@@ -58,7 +58,7 @@ const BaseTrigger = React.forwardRef(function BaseTrigger(
     }
 
     e.stopPropagation()
-    dispatch({ type: 'OPEN_POPOVER' })
+    dispatch({ type: 'OPEN_OVERLAY' })
   }
 
   const handleClick: React.MouseEventHandler<HTMLElement> = e => {
@@ -71,9 +71,9 @@ const BaseTrigger = React.forwardRef(function BaseTrigger(
       e.preventDefault()
 
       if (open) {
-        dispatch({ type: 'CLOSE_POPOVER' })
+        dispatch({ type: 'CLOSE_OVERLAY' })
       } else {
-        dispatch({ type: 'OPEN_POPOVER' })
+        dispatch({ type: 'OPEN_OVERLAY' })
       }
     }
 
@@ -84,7 +84,7 @@ const BaseTrigger = React.forwardRef(function BaseTrigger(
 
   const handleMouseEnter: React.MouseEventHandler<HTMLElement> = e => {
     if (trigger === 'hover') {
-      dispatch({ type: 'OPEN_POPOVER' })
+      dispatch({ type: 'OPEN_OVERLAY' })
     }
     if (onMouseEnter) {
       onMouseEnter(e)
@@ -93,7 +93,7 @@ const BaseTrigger = React.forwardRef(function BaseTrigger(
 
   const handleMouseLeave: React.MouseEventHandler<HTMLElement> = e => {
     if (trigger === 'hover') {
-      dispatch({ type: 'CLOSE_POPOVER' })
+      dispatch({ type: 'CLOSE_OVERLAY' })
     }
 
     if (onMouseLeave) {
@@ -121,9 +121,9 @@ const EnhancedTrigger = React.forwardRef(function EnhancedTrigger(
   ref
 ) {
   return (
-    <PopoverContextProvider>
+    <OverlayContextProvider>
       <BaseTrigger {...props} ref={ref} />
-    </PopoverContextProvider>
+    </OverlayContextProvider>
   )
 })
 

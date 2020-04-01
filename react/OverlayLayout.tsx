@@ -7,7 +7,7 @@ import Popper from './components/Popper'
 import TrapFocus from './components/TrapFocus'
 import Fade from './components/Animations/Fade'
 import OutsideClickHandler from './components/OutsideClickHandler'
-import { usePopoverState, usePopoverDispatch } from './PopoverContext'
+import { useOverlayState, useOverlayDispatch } from './OverlayContext'
 import useEventCallback from './modules/useEventCallback'
 import handleContainerStyle, { RestoreFn } from './modules/handleContainerStyle'
 
@@ -43,7 +43,7 @@ function useTransition(option: TransitionComponentType) {
 
 const CSS_HANDLES = ['container', 'arrow'] as const
 
-export default function Popover(props: Props) {
+export default function Overlay(props: Props) {
   const {
     role,
     children,
@@ -54,8 +54,8 @@ export default function Popover(props: Props) {
     transitionComponent = 'fade',
     offsets,
   } = props
-  const { open, containerRef, triggerMode } = usePopoverState()
-  const dispatch = usePopoverDispatch()
+  const { open, containerRef, triggerMode } = useOverlayState()
+  const dispatch = useOverlayDispatch()
   const handles = useCssHandles(CSS_HANDLES)
   const [arrowRef, setArrowRef] = useState<HTMLElement | null>(null)
   const TransitionComponent = useTransition(transitionComponent)
@@ -66,7 +66,7 @@ export default function Popover(props: Props) {
         e.target as Node | null
       )
       if (!triggerClicked) {
-        dispatch({ type: 'CLOSE_POPOVER' })
+        dispatch({ type: 'CLOSE_OVERLAY' })
       }
     },
     [containerRef, dispatch]
@@ -77,14 +77,14 @@ export default function Popover(props: Props) {
       if (e.key !== 'Escape' || triggerMode !== 'click') {
         return
       }
-      dispatch({ type: 'CLOSE_POPOVER' })
+      dispatch({ type: 'CLOSE_OVERLAY' })
     },
     [dispatch, triggerMode]
   )
 
   const closeOnScroll = useEventCallback((e: any) => {
     e.preventDefault()
-    dispatch({ type: 'CLOSE_POPOVER' })
+    dispatch({ type: 'CLOSE_OVERLAY' })
   })
 
   useEffect(() => {
@@ -109,7 +109,7 @@ export default function Popover(props: Props) {
     (e: React.MouseEvent) => {
       if (triggerMode === 'click') {
         // The Trigger works as a toggle, so if this event
-        // go up to the Trigger it will close the Popover
+        // go up to the Trigger it will close the Overlay
         e.stopPropagation()
         e.preventDefault()
       }

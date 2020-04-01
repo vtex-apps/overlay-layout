@@ -11,6 +11,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Initial release.
 - Support to trigger on hover.
 - Support for animations.
-- Export `PopoverContext`.
-- `backdrop` and `onScroll` props to the `popover-layout`.
-- `showArrow` and `offsets` props to `popover-layout`.
+- Export `OverlayContext`.
+- `backdrop` and `onScroll` props to the `overlay-layout`.
+- `showArrow` and `offsets` props to `overlay-layout`.
