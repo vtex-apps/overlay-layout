@@ -1,10 +1,10 @@
 import React, { createContext, useReducer, useContext } from 'react'
 
-import { TriggerElement, TriggerMode } from './Trigger'
+import { TriggerMode } from './Trigger'
 
 interface State {
   open: boolean
-  containerRef?: React.RefObject<TriggerElement> | null
+  containerRef?: React.RefObject<HTMLElement> | null
   triggerMode: TriggerMode
 }
 
@@ -24,7 +24,7 @@ interface CloseAction {
 
 interface SetContainerRefAction {
   type: 'SET_CONTAINER_REF'
-  payload: { containerRef: React.RefObject<TriggerElement> }
+  payload: { containerRef: React.RefObject<HTMLElement> }
 }
 
 interface SetTriggerModeAction {
