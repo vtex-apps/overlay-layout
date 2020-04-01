@@ -28,8 +28,8 @@ Now you can use the two blocks exported by the app:
 
 Block name | Description |
 | --------------------| -------- |
-| `overlay-trigger` | Declares a renderable children block responsible for triggering the `overlay-layout` content. |
-| `overlay-layout` | Declares a renderable children block responsible for building the   |
+| `overlay-trigger` | ![https://img.shields.io/badge/-Mandatory-red](https://img.shields.io/badge/-Mandatory-red) Declares a renderable children block responsible for triggering the `overlay-layout` content. |
+| `overlay-layout` | ![https://img.shields.io/badge/-Mandatory-red](https://img.shields.io/badge/-Mandatory-red) Declares a renderable children block responsible for building the   |
 
 2.  In any desired theme template, add the `overlay-trigger` and then declare it using a block of your choosing and the `overlay-layout`:
 
@@ -43,7 +43,7 @@ Block name | Description |
   },
 ```
 
-Notice that the `overlay-trigger` is not rendered. Following the example stated above, the `rich-text` block will be the one rendered and responsible for effectively triggering the Overlay Layout content (defined by the children block of `overlay-layout`).
+*Notice that the* `overlay-trigger` i*s not rendered. Following the example stated above, the* `rich-text` *block will be the one rendered and responsible for effectively triggering the Overlay Layout content (defined by the children block of* `overlay-layout`*).*
 
 ### `overlay-trigger` props
 
@@ -77,7 +77,7 @@ Notice that the `overlay-trigger` is not rendered. Following the example stated 
 }
 ```
 
-The `overlay-layout` defines which block will be rendered in order to build the Overlay Layout content. This means that you will have to pass to it a children block to be rendered. 
+*The* `overlay-layout` *defines which block will be rendered in order to build the Overlay Layout content. This means that you will have to pass to it a children block to be rendered.* 
 
 ### `overlay-layout` props
 
