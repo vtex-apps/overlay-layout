@@ -3,19 +3,24 @@ import classnames from 'classnames'
 import { useCssHandles } from 'vtex.css-handles'
 import { TransitionProps } from 'react-transition-group/Transition'
 
-import Fade from './Animations/Fade'
-import ownerDocument from '../modules/ownerDocument'
+import styles from './styles.css'
+import Fade from './components/Animations/Fade'
+import ownerDocument from './modules/ownerDocument'
 
 export type BackdropMode = 'display' | 'clickable' | 'none'
+
+interface Classes {
+  backdropContainer: string
+  backdrop: string
+}
 
 interface Props {
   open: boolean
   exited: boolean
+  classes?: Partial<Classes>
   transitionDuration?: TransitionProps['timeout']
   onClick?: (e: React.MouseEvent<HTMLDivElement>) => void
 }
-
-const CSS_HANDLES = ['backdropContainer', 'backdrop'] as const
 
 function restoreOverflowX(
   valueRef: React.MutableRefObject<string | undefined>,
@@ -29,11 +34,20 @@ function restoreOverflowX(
   }
 }
 
+const CSS_HANDLES = ['backdrop', 'backdropContainer'] as const
+
 const Backdrop: React.FC<Props> = props => {
-  const { children, open, onClick, transitionDuration, exited } = props
-  const handles = useCssHandles(CSS_HANDLES)
+  const {
+    open,
+    exited,
+    onClick,
+    children,
+    classes = {},
+    transitionDuration,
+  } = props
   const rootRef = useRef(null)
   const overflowX = useRef<string>()
+  const handles = useCssHandles(CSS_HANDLES)
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (onClick) {
@@ -62,15 +76,29 @@ const Backdrop: React.FC<Props> = props => {
     }
   }, [open, exited])
 
-  const classes = classnames(handles.backdropContainer, 'fixed left-0 top-0')
+  if (!open && exited) {
+    return null
+  }
+
+  const containerClasses = classnames(
+    handles.backdropContainer,
+    classes.backdropContainer,
+    styles.backdropContainer
+  )
+
+  const backdropClasses = classnames(
+    handles.backdrop,
+    classes.backdrop,
+    styles.backdrop
+  )
 
   return (
     <Fade in={open} timeout={transitionDuration}>
-      <div className={classes} ref={rootRef}>
+      <div className={containerClasses} ref={rootRef}>
         <div
           role="presentation"
           onClick={handleClick}
-          className={`${handles.backdrop} bg-base--inverted o-50 h-100`}
+          className={backdropClasses}
         >
           {children}
         </div>

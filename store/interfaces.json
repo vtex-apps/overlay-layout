@@ -1,10 +1,10 @@
 {
-  "popover-trigger": {
-    "component": "Trigger",
+  "overlay-trigger": {
+    "component": "OverlayTrigger",
     "composition": "children"
   },
-  "popover-layout": {
-    "component": "Popover",
+  "overlay-layout": {
+    "component": "OverlayLayout",
     "composition": "children"
   }
 }
