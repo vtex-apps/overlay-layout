@@ -1,11 +1,11 @@
 import React, {
   useRef,
+  useMemo,
   useState,
   useEffect,
   forwardRef,
   useCallback,
   MutableRefObject,
-  useMemo,
 } from 'react'
 import {
   createPopper,
@@ -22,7 +22,8 @@ import { useCssHandles } from 'vtex.css-handles'
 import styles from '../styles.css'
 import setRef from '../modules/setRef'
 import useForkRef from '../modules/useForkRef'
-import Backdrop, { BackdropMode } from './Backdrop'
+import { useOverlayDispatch } from '../OverlayContext'
+import Backdrop, { BackdropMode } from '../Backdrop'
 
 interface Offsets {
   distance: number
@@ -35,6 +36,13 @@ type AnchorElType =
   | (() => VirtualElement)
   | React.RefObject<HTMLElement>
 
+interface Classes {
+  container: string
+  popperArrow: string
+  backdrop: string
+  backdropContainer: string
+}
+
 interface Props
   extends React.DetailedHTMLProps<
     React.HTMLAttributes<HTMLDivElement>,
@@ -43,9 +51,10 @@ interface Props
   role?: string
   open?: boolean
   transition?: boolean
-  anchorEl?: AnchorElType
   backdrop?: BackdropMode
+  anchorEl?: AnchorElType
   children: React.ReactNode
+  classes?: Partial<Classes>
   offsets?: Partial<Offsets>
   arrowEl?: HTMLElement | null
   placement?: PopperPlacementType
@@ -55,12 +64,12 @@ function getAnchorEl(anchorEl: React.ReactNode) {
   return typeof anchorEl === 'function' ? anchorEl() : anchorEl
 }
 
-const CSS_HANDLES = ['popper', 'popperArrow'] as const
-
 const defaultOffsets: Offsets = {
   distance: 0,
   skidding: 0,
 }
+
+const CSS_HANDLES = ['popper', 'popperArrow'] as const
 
 const Popper = forwardRef(function Popper(props: Props, ref) {
   const {
@@ -68,9 +77,11 @@ const Popper = forwardRef(function Popper(props: Props, ref) {
     anchorEl,
     children,
     open = false,
-    backdrop = '',
+    classes = {},
+    backdrop = 'none',
     transition = false,
     role = 'presentation',
+    className: classNameProp,
     offsets: offsetsProp = defaultOffsets,
     placement: initialPlacement = 'bottom',
     ...rest
@@ -78,12 +89,13 @@ const Popper = forwardRef(function Popper(props: Props, ref) {
 
   const tooltipRef = useRef<HTMLElement>(null)
   const ownRef = useForkRef(tooltipRef, ref)
+  const dispatch = useOverlayDispatch()
+  const handles = useCssHandles(CSS_HANDLES)
   const popperRef: MutableRefObject<PopperInstance | null> = useRef<
     PopperInstance
   >(null)
   const [placement, setPlacement] = useState(initialPlacement)
   const [exited, setExited] = useState(true)
-  const handles = useCssHandles(CSS_HANDLES)
 
   // It doesn't have a dependency array because it should update
   // after every render of react
@@ -171,6 +183,7 @@ const Popper = forwardRef(function Popper(props: Props, ref) {
 
   const handleEnter = () => {
     setExited(false)
+    dispatch({ type: 'SET_EXITED', payload: { exited: false } })
   }
 
   const handleClose = () => {
@@ -183,6 +196,7 @@ const Popper = forwardRef(function Popper(props: Props, ref) {
 
   const handleExited = () => {
     setExited(true)
+    dispatch({ type: 'SET_EXITED', payload: { exited: true } })
     handleClose()
   }
 
@@ -202,6 +216,14 @@ const Popper = forwardRef(function Popper(props: Props, ref) {
     }
   }, [open, transition])
 
+  const backdropClasses = useMemo(
+    () => ({
+      backdrop: classes.backdrop,
+      backdropContainer: classes.backdropContainer,
+    }),
+    [classes]
+  )
+
   if (!open && (!transition || exited)) {
     return null
   }
@@ -216,15 +238,31 @@ const Popper = forwardRef(function Popper(props: Props, ref) {
     }
   }
 
-  const classes = classnames(handles.popper, styles.dropdown, {
-    [handles.popperArrow]: Boolean(arrowEl),
-  })
+  const popperArrowClasses = classnames(
+    handles.popperArrow,
+    classes.popperArrow,
+    styles.popperArrow
+  )
+
+  const containerClasses = classnames(
+    handles.popper,
+    classNameProp,
+    classes.container,
+    styles.dropdown,
+    {
+      [popperArrowClasses]: Boolean(arrowEl),
+    }
+  )
 
   return (
-    <div className={classes} role={role} ref={handleRef} {...rest}>
+    <div className={containerClasses} role={role} ref={handleRef} {...rest}>
       {typeof children === 'function' ? children(childProps) : children}
       {backdrop !== 'none' && (
-        <Backdrop open={open} exited={!transition || exited} />
+        <Backdrop
+          open={open}
+          classes={backdropClasses}
+          exited={!transition || exited}
+        />
       )}
     </div>
   )

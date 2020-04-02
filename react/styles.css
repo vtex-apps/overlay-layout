@@ -1,9 +1,17 @@
 .backdropContainer {
+  top: 0;
+  left: 0;
   z-index: -1;
-  touch-action: none;
   width: 300vw;
   height: 300vh;
+  position: fixed;
+  touch-action: none;
   transform: translate(-100vw, -100vh);
+}
+
+.backdrop {
+  opacity: 0.5;
+  height: 100%;
 }
 
 .dropdown {

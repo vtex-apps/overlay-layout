@@ -14,3 +14,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Export `OverlayContext`.
 - `backdrop` and `onScroll` props to the `overlay-layout`.
 - `showArrow` and `offsets` props to `overlay-layout`.
+- Option `'none'` to trigger mode.

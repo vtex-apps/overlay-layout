@@ -1,15 +1,17 @@
 import React, { createContext, useReducer, useContext } from 'react'
 
-import { TriggerMode } from './Trigger'
+import { TriggerMode } from './OverlayTrigger'
 
 interface State {
   open: boolean
   containerRef?: React.RefObject<HTMLElement> | null
   triggerMode: TriggerMode
+  exited: boolean
 }
 
 const DEFAULT_STATE: State = {
   open: false,
+  exited: false,
   containerRef: null,
   triggerMode: 'click',
 }
@@ -20,6 +22,11 @@ interface OpenAction {
 
 interface CloseAction {
   type: 'CLOSE_OVERLAY'
+}
+
+interface SetExitedAction {
+  type: 'SET_EXITED'
+  payload: { exited: boolean }
 }
 
 interface SetContainerRefAction {
@@ -35,8 +42,9 @@ interface SetTriggerModeAction {
 type Action =
   | OpenAction
   | CloseAction
-  | SetContainerRefAction
+  | SetExitedAction
   | SetTriggerModeAction
+  | SetContainerRefAction
 type Dispatch = (action: Action) => void
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -66,6 +74,12 @@ function overlayContextReducer(state: State = DEFAULT_STATE, action: Action) {
         ...state,
         triggerMode: action.payload.triggerMode,
       }
+    case 'SET_EXITED': {
+      return {
+        ...state,
+        exited: action.payload.exited,
+      }
+    }
     default:
       return state
   }

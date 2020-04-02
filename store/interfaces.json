@@ -1,10 +1,10 @@
 {
   "overlay-trigger": {
-    "component": "Trigger",
+    "component": "OverlayTrigger",
     "composition": "children"
   },
   "overlay-layout": {
-    "component": "Overlaylayout",
+    "component": "OverlayLayout",
     "composition": "children"
   }
 }

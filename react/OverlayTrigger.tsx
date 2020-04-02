@@ -1,6 +1,5 @@
 import React from 'react'
 import classnames from 'classnames'
-import { useCssHandles } from 'vtex.css-handles'
 import {
   useResponsiveValue,
   MaybeResponsiveInput,
@@ -8,33 +7,34 @@ import {
 
 import BaseTrigger from './BaseTrigger'
 
-const CSS_HANDLES = ['trigger'] as const
-
-export type TriggerMode = 'click' | 'hover'
+export type TriggerMode = 'click' | 'hover' | 'none'
 
 interface Props {
-  children: React.ReactNode
+  children: React.ReactElement
+  backdrop?: 'visible' | 'none'
   trigger: MaybeResponsiveInput<TriggerMode>
 }
 
-export default function Trigger(props: Props) {
+export default function OverlayTrigger(props: Props) {
   const { children, trigger: triggerProp = 'click' } = props
-  const handles = useCssHandles(CSS_HANDLES)
   const trigger = useResponsiveValue(triggerProp)
   const role = trigger === 'click' ? 'button' : undefined
   const containerClasses = classnames(
-    handles.trigger,
-    'outline-0 bg-transparent bn pa0 dib',
+    'outline-0 bg-transparent bn pa0 dib bg-red',
     {
       pointer: trigger === 'click',
     }
   )
 
   return (
-    <BaseTrigger trigger={trigger}>
-      <div role={role} tabIndex={0} className={containerClasses}>
-        {children}
-      </div>
+    <BaseTrigger
+      role={role}
+      tabIndex={0}
+      style={{ zIndex: 2000 }}
+      trigger={trigger}
+      className={containerClasses}
+    >
+      {children}
     </BaseTrigger>
   )
 }

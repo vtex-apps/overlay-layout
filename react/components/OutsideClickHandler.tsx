@@ -1,11 +1,16 @@
 import React, { useCallback, useRef, forwardRef, useEffect } from 'react'
-import { addEventListener } from 'consolidated-events'
+import classnames from 'classnames'
 import { useCssHandles } from 'vtex.css-handles'
+import { addEventListener } from 'consolidated-events'
 
 import setRef from '../modules/setRef'
 import useForkRef from '../modules/useForkRef'
 
-interface Props {
+interface Props
+  extends React.DetailedHTMLProps<
+    React.HTMLAttributes<HTMLDivElement>,
+    HTMLDivElement
+  > {
   children: React.ReactNode
   disabled?: boolean
   useCapture?: boolean
@@ -23,12 +28,14 @@ const OutsideClickHandler = forwardRef(function OutsideClickHandler(
     disabled = false,
     useCapture = true,
     onOutsideClick,
+    className: classNameProp,
+    ...rest
   } = props
   const rootRef = useRef<HTMLDivElement>(null)
   const ownRef = useForkRef(rootRef, ref)
+  const handles = useCssHandles(CSS_HANDLES)
   const removeMouseUpRef = useRef<Function | null>()
   const removeMouseDownRef = useRef<Function | null>()
-  const handles = useCssHandles(CSS_HANDLES)
   const handleRef = useCallback(
     node => {
       setRef(ownRef, node)
@@ -111,8 +118,10 @@ const OutsideClickHandler = forwardRef(function OutsideClickHandler(
     return () => removeEventListeners()
   }, [addMouseDownEventListener, disabled, useCapture])
 
+  const className = classnames(handles.outsideClickHandler, classNameProp)
+
   return (
-    <div className={handles.outsideClickHandler} ref={handleRef}>
+    <div className={className} {...rest} ref={handleRef}>
       {children}
     </div>
   )

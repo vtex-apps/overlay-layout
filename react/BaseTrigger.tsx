@@ -1,8 +1,10 @@
+import React, { useEffect, useRef } from 'react'
 import {
   useResponsiveValue,
   MaybeResponsiveInput,
 } from 'vtex.responsive-values'
-import React, { useEffect, useRef } from 'react'
+import classnames from 'classnames'
+import { useCssHandles } from 'vtex.css-handles'
 
 import {
   useOverlayState,
@@ -11,30 +13,41 @@ import {
 } from './OverlayContext'
 import useForkRef from './modules/useForkRef'
 
-export type TriggerMode = 'click' | 'hover'
+export type TriggerMode = 'click' | 'hover' | 'none'
 
-interface Props<H extends HTMLElement>
-  extends React.DetailedHTMLProps<React.HTMLAttributes<H>, H> {
+type TriggerElement = HTMLDivElement & HTMLLIElement
+
+interface Props
+  extends React.DetailedHTMLProps<
+    React.HTMLAttributes<TriggerElement>,
+    TriggerElement
+  > {
   children: React.ReactElement
+  tag?: 'div' | 'li'
   trigger?: MaybeResponsiveInput<TriggerMode>
 }
 
+const CSS_HANDLES = ['trigger'] as const
+
 const BaseTrigger = React.forwardRef(function BaseTrigger(
-  props: Props<HTMLElement>,
-  ref
+  props: Props,
+  ref: React.Ref<TriggerElement>
 ) {
   const {
     onClick,
     children,
     onMouseEnter,
     onMouseLeave,
+    tag: Tag = 'div',
+    className: classNameProp,
     trigger: triggerProp = 'click',
     ...rest
   } = props
   const trigger = useResponsiveValue(triggerProp)
   const dispatch = useOverlayDispatch()
   const { open } = useOverlayState()
-  const containerRef = useRef<HTMLElement>(null)
+  const handles = useCssHandles(CSS_HANDLES)
+  const containerRef = useRef<TriggerElement>(null)
   const handleRef = useForkRef(containerRef, ref)
   const role = trigger === 'click' ? 'button' : undefined
 
@@ -52,7 +65,7 @@ const BaseTrigger = React.forwardRef(function BaseTrigger(
     })
   }, [dispatch, trigger])
 
-  const handleKeydown = (e: React.KeyboardEvent<HTMLElement>) => {
+  const handleKeydown = (e: React.KeyboardEvent<TriggerElement>) => {
     if (e.key !== 'Enter' || trigger !== 'click') {
       return
     }
@@ -61,7 +74,7 @@ const BaseTrigger = React.forwardRef(function BaseTrigger(
     dispatch({ type: 'OPEN_OVERLAY' })
   }
 
-  const handleClick: React.MouseEventHandler<HTMLElement> = e => {
+  const handleClick: React.MouseEventHandler<TriggerElement> = e => {
     if (trigger === 'click') {
       // This is needed to block some parent element to use this event
       // to do some action (like open a Modal or change the url).
@@ -81,17 +94,17 @@ const BaseTrigger = React.forwardRef(function BaseTrigger(
       onClick(e)
     }
   }
-
-  const handleMouseEnter: React.MouseEventHandler<HTMLElement> = e => {
+  const handleMouseEnter: React.MouseEventHandler<TriggerElement> = e => {
     if (trigger === 'hover') {
       dispatch({ type: 'OPEN_OVERLAY' })
     }
+
     if (onMouseEnter) {
       onMouseEnter(e)
     }
   }
 
-  const handleMouseLeave: React.MouseEventHandler<HTMLElement> = e => {
+  const handleMouseLeave: React.MouseEventHandler<TriggerElement> = e => {
     if (trigger === 'hover') {
       dispatch({ type: 'CLOSE_OVERLAY' })
     }
@@ -101,24 +114,27 @@ const BaseTrigger = React.forwardRef(function BaseTrigger(
     }
   }
 
+  const className = classnames(handles.trigger, classNameProp)
+
   return (
-    <>
-      {React.cloneElement(children, {
-        role,
-        ref: handleRef,
-        onClick: handleClick,
-        onKeyDown: handleKeydown,
-        onMouseEnter: handleMouseEnter,
-        onMouseLeave: handleMouseLeave,
-        ...rest,
-      })}
-    </>
+    <Tag
+      role={role}
+      ref={handleRef}
+      className={className}
+      onClick={handleClick}
+      onKeyDown={handleKeydown}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      {...rest}
+    >
+      {children}
+    </Tag>
   )
 })
 
 const EnhancedTrigger = React.forwardRef(function EnhancedTrigger(
-  props: Props<HTMLElement>,
-  ref
+  props: Props,
+  ref: React.Ref<TriggerElement>
 ) {
   return (
     <OverlayContextProvider>
