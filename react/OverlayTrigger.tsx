@@ -10,7 +10,7 @@ import BaseTrigger from './BaseTrigger'
 export type TriggerMode = 'click' | 'hover' | 'none'
 
 interface Props {
-  children: React.ReactElement
+  children: React.ReactNode
   backdrop?: 'visible' | 'none'
   trigger: MaybeResponsiveInput<TriggerMode>
 }

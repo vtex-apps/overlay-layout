@@ -41,7 +41,7 @@ interface Props
   placement?: PopperPlacement
   backdrop?: 'visible' | 'none'
   scrollBehavior?: 'lock-page-scroll' | 'close-on-scroll' | 'default'
-  transitionComponent: TransitionComponentType
+  transitionComponent?: TransitionComponentType
 }
 
 function useTransition(option: TransitionComponentType) {
