@@ -22,7 +22,7 @@ interface Props
     React.HTMLAttributes<TriggerElement>,
     TriggerElement
   > {
-  children: React.ReactElement
+  children: React.ReactNode
   tag?: 'div' | 'li'
   trigger?: MaybeResponsiveInput<TriggerMode>
 }
