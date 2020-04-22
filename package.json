@@ -12,7 +12,7 @@
     "typescript": "^3.7.5"
   },
   "scripts": {
-    "lint": "cd ./react && yarn lint",
+    "lint": "eslint --quiet --fix --ext ts,tsx ./react",
     "test": "cd ./react && yarn test",
     "verify": "yarn lint && yarn test"
   },
