@@ -139,7 +139,7 @@ export default function BaseOverlay(props: Props) {
         // The Trigger works as a toggle, so if this event
         // go up to the Trigger it will close the Overlay
         e.stopPropagation()
-        e.preventDefault()
+        // e.preventDefault()
       }
 
       if (onClick) {
