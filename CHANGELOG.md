@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Fixed
+- Event Bubbling in handleClick `BaseOverlay`.
+
 ## [0.1.2] - 2020-04-07
 ### Fixed
 - Typings of `BaseTrigger`, `BaseOverlay`, `OverlayLayout` and `OverlayTrigger`.
