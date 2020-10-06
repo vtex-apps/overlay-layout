@@ -1,7 +1,7 @@
 {
   "vendor": "vtex",
   "name": "overlay-layout",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "title": "VTEX Overlay Layout",
   "description": "A React Overlay component.",
   "builders": {
